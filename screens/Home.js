@@ -1,4 +1,4 @@
-import { FlatList, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 
 import { globalStyles } from '../styles/global';
@@ -21,14 +21,19 @@ const Home = ({ navigation }) => {
     return (
         <FlatList
         data={clothing}
-        renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
-            <Card style={styles.itemCard}>
-                <Text>{item.title}</Text>
-                <Text>{item.price}</Text>
-            </Card>
-        </TouchableOpacity>
-        )}
+        renderItem={({ item }) => {
+
+        return (
+          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
+              <Card style={styles.itemCard}>
+                  <Text>{item.title}</Text>
+                  <Text>{item.price}</Text>
+                  <View>
+                    <Image source={ (item.image) } />
+                  </View>
+              </Card>
+          </TouchableOpacity>
+          )}}
         keyExtractor={(item) => item.id}
         />
     );

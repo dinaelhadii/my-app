@@ -10,6 +10,7 @@ export const globalStyles = StyleSheet.create({
     },
     titleText: {
         fontFamily: 'nunito-bold',
+        fontSize: 25
     },
     text: {
         fontFamily: 'nunito-regular',

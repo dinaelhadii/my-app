@@ -6,7 +6,7 @@ import { globalStyles } from '../styles/global';
 const Cart = () => {
     return ( 
         <View style={globalStyles.container}>
-            <Text style={globalStyles.content}>Warenkorbinhalt</Text>
+            <Text style={globalStyles.text}>Warenkorbinhalt</Text>
         </View>
      );
 }

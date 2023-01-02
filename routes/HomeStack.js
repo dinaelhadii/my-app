@@ -14,13 +14,13 @@ function HomeStack() {
                 options={{
                     headerShown: false
                 }}
-                title='Willkommen'
             />
             <Stack.Screen 
                 name='ProductDetails'
                 component={ProductDetails}
                 options={{
-                    headerShown: false
+                    headerShown: false,
+                    headerTitle: {}
                 }}
             />
         </Stack.Navigator>
