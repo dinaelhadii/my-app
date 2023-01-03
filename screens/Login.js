@@ -4,6 +4,7 @@ import { globalStyles } from "../styles/global";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { FontAwesome } from '@expo/vector-icons';
+import { Vibration } from "react-native";
 
 const Login = ({ navigation }) => {
 
@@ -38,6 +39,7 @@ const Login = ({ navigation }) => {
                 console.log('Registered with', user.email);
             })
             .catch(error => alert(error.message))
+            Vibration.vibrate([500,200,500]);
     }
 
     return ( 
