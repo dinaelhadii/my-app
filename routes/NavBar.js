@@ -10,7 +10,7 @@ import Cart from '../screens/Cart';
 
 const Tab = createBottomTabNavigator();
 
-function NavBar() {
+function NavBar({ userName }) {
   return (
     <Tab.Navigator>
       <Tab.Screen 
@@ -21,6 +21,7 @@ function NavBar() {
           tabBarIcon: ({color}) => 
           (<Feather name ='home' size={24} color={color} />)
         }}
+        userName={userName}
         />
         <Tab.Screen 
         name="Wunschliste" 

@@ -2,7 +2,6 @@ import { View, StyleSheet, Text, Image, Button, FlatList } from 'react-native';
 import { globalStyles, images } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
 
 const ProductDetails = ({ route, navigation }) => {
 

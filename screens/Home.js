@@ -5,7 +5,7 @@ import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
 import ClothingList from '../components/ClothingList';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, userName }) => {
 
   const [clothing, setClothing] = useState([]);
 
@@ -19,6 +19,10 @@ const Home = ({ navigation }) => {
   }, []);
 
     return (
+      <View>
+        <View>
+          <Text>Welcome {userName}</Text>
+        </View>
         <FlatList
         data={clothing}
         renderItem={({ item }) => {
@@ -38,6 +42,7 @@ const Home = ({ navigation }) => {
           )}}
         keyExtractor={(item) => item.id}
         />
+      </View>
     );
 }
 

@@ -5,7 +5,7 @@ import ProductDetails from '../screens/ProductDetails';
 
 const Stack = createStackNavigator();
 
-function HomeStack() {
+function HomeStack({ userName }) {
     return (
         <Stack.Navigator>
             <Stack.Screen 
@@ -14,6 +14,7 @@ function HomeStack() {
                 options={{
                     headerShown: false
                 }}
+                userName='dina'
             />
             <Stack.Screen 
                 name='ProductDetails'
