@@ -6,7 +6,8 @@ export const globalStyles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: '#fff',
         justifyContent: 'flex-start',
-        padding: 20
+        paddingRight: 15,
+        paddingLeft: 15,
     },
     titleText: {
         fontFamily: 'nunito-bold',
@@ -14,7 +15,10 @@ export const globalStyles = StyleSheet.create({
     },
     text: {
         fontFamily: 'nunito-regular',
-    }
+    },
+    itemCard: {
+        padding: 10,
+      },
 })
 
 export const images = StyleSheet.create({

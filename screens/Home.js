@@ -7,7 +7,7 @@ import ClothingList from '../components/ClothingList';
 
 const Home = ({ navigation }) => {
 
-    const [clothing, setClothing] = useState([]);
+  const [clothing, setClothing] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -24,25 +24,21 @@ const Home = ({ navigation }) => {
         renderItem={({ item }) => {
 
         return (
-          <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
-              <Card style={styles.itemCard}>
+          <View>
+            <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
+              <Card style={globalStyles.itemCard}>
                   <Text>{item.title}</Text>
                   <Text>{item.price}</Text>
                   <View>
                     <Image source={ (item.image) } />
                   </View>
               </Card>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
           )}}
         keyExtractor={(item) => item.id}
         />
     );
 }
-
-const styles = StyleSheet.create({
-    itemCard: {
-      padding: 10,
-    },
-  });
 
 export default Home;

@@ -18,28 +18,29 @@ function NavBar() {
         component={HomeStack} 
         options={{
           title: 'Home',
-          tabBarIcon: () => (<Feather name='home' size={24} color='black' />)
+          tabBarIcon: ({color}) => 
+          (<Feather name ='home' size={24} color={color} />)
         }}
         />
         <Tab.Screen 
         name="Wunschliste" 
         component={Wishlist} 
         options={{
-          tabBarIcon: () => (<Feather name='heart' size={24} color='black' />)
+          tabBarIcon: ({color}) => (<Feather name='heart' size={24} color={color} />)
         }}
         />
       <Tab.Screen 
         name="Warenkorb" 
         component={Cart}
         options={{
-          tabBarIcon: () => (<Feather name='shopping-cart' size={24} color='black' />)
+          tabBarIcon: ({color}) => (<Feather name='shopping-cart' size={24} color={color} />)
         }}
         />
         <Tab.Screen 
         name="Profil" 
         component={Profile} 
         options={{
-          tabBarIcon: () => (<Ionicons name="ios-person-outline" size={24} color="black" />)
+          tabBarIcon: ({color}) => (<Ionicons name="ios-person-outline" size={24} color={color} />)
         }}
         />
     </Tab.Navigator>
