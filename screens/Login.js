@@ -13,10 +13,9 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState('');
 
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 navigation.navigate('NavBar', userName)
-                console.log(userName);
             }
         })
 
@@ -28,8 +27,9 @@ const Login = ({ navigation }) => {
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log('Logged in with: ', user.email);
+                Vibration.vibrate([500, 100, 500]);
             })
-            .catch(error => alert(error.message))
+            .catch(error => alert(error.message));
     }
 
     const handleSignUp = () => {
@@ -39,7 +39,6 @@ const Login = ({ navigation }) => {
                 console.log('Registered with', user.email);
             })
             .catch(error => alert(error.message))
-            Vibration.vibrate([500,200,500]);
     }
 
     return ( 
@@ -77,7 +76,7 @@ const Login = ({ navigation }) => {
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
-                        onPress={() => handleLogin}
+                        onPress={() => handleLogin()}
                         style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text>
                     </TouchableOpacity>

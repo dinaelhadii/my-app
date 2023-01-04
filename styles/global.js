@@ -11,14 +11,21 @@ export const globalStyles = StyleSheet.create({
     },
     titleText: {
         fontFamily: 'nunito-bold',
-        fontSize: 25
+        fontSize: 20,
+        paddingTop: 10,
+        paddingBottom: 10
     },
     text: {
         fontFamily: 'nunito-regular',
+        fontSize: 14
     },
     itemCard: {
         padding: 10,
       },
+      impressum: {
+        flex: 1,
+        justifyContent: 'flex-end'
+    },
 })
 
 export const images = StyleSheet.create({

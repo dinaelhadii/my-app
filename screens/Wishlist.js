@@ -15,7 +15,6 @@ const Wishlist = ({ route }) => {
         }
     }, [item])
 
-
     return ( 
         <FlatList 
             data={wishlist}
