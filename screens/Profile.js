@@ -25,24 +25,24 @@ const Profile = ({ navigation }) => {
     return (
         <View style={globalStyles.container}>
             <View>
-            <Text style={globalStyles.titleText}>Signed in: {auth.currentUser?.email}</Text>
-            <FlatList
-            data={profileOps}
-            renderItem={({ item }) => {
-    
-            return (
-                <View>
-                <TouchableOpacity onPress={() => {
-                    if (item.key === '5') {
-                    handleSignOut()}}}>
-                    <Card style={globalStyles.itemCard}>
-                        <Text>{item.title}</Text>
-                    </Card> 
-                </TouchableOpacity>
-                </View>
-                )}}
-            keyExtractor={(item) => item.key}
-            />
+                <Text style={globalStyles.titleText}>Signed in: {auth.currentUser?.email}</Text>
+                <FlatList
+                data={profileOps}
+                renderItem={({ item }) => {
+        
+                return (
+                    <View>
+                    <TouchableOpacity onPress={() => {
+                        if (item.key === '5') {
+                        handleSignOut()}}}>
+                        <Card style={globalStyles.itemCard}>
+                            <Text>{item.title}</Text>
+                        </Card> 
+                    </TouchableOpacity>
+                    </View>
+                    )}}
+                keyExtractor={(item) => item.key}
+                />
             </View>
             <View style={globalStyles.impressum}>
                 <TouchableOpacity onPress={() => navigation.navigate('Impressum')}>
