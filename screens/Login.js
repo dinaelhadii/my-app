@@ -1,7 +1,7 @@
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text } from "react-native";
 import { useState, useEffect } from "react";
 import { globalStyles } from "../styles/global";
-import { auth } from "../App";
+import { auth } from "../firebase";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { FontAwesome } from '@expo/vector-icons';
 import { Vibration } from "react-native";
