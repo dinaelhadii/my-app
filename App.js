@@ -1,9 +1,12 @@
+import "react-native-gesture-handler";
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import NavBar from './routes/NavBar';
+
+import LoginStack from "./routes/LoginStack";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,7 +53,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <NavBar />
+      <LoginStack />
       <StatusBar></StatusBar>
   </NavigationContainer>
   );
