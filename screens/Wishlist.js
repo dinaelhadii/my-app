@@ -7,7 +7,8 @@ import { globalStyles } from '../styles/global';
 const Wishlist = ({ route }) => {
 
     const [wishlist, setWishlist] = useState([])
-    const item = route.params.item;
+    const item = route.params;
+    console.log(item);
 
     useEffect(() => {
         if ( item && !wishlist.includes(item)) {

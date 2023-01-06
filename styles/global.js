@@ -26,6 +26,15 @@ export const globalStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-end'
     },
+    input: {
+        borderWidth: 3,
+        borderColor: 'black',
+        padding: 10,
+        fontSize: 18,
+        borderRadius: 8,
+        margin: 20,
+        backgroundColor: '#b3d7ff',
+    },
 })
 
 export const images = StyleSheet.create({

@@ -3,13 +3,12 @@ import { useState, useEffect } from 'react';
 
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
-import ClothingList from '../components/ClothingList';
+
+import { products } from '../firebase';
 
 const Home = ({ navigation }) => {
 
-  const [clothing, setClothing] = useState([]);
-
-  useEffect(() => {
+/*   useEffect(() => {
     async function fetchData() {
       const response = await fetch('https://dummyjson.com/products?limit=100&skip=10');
       const data = await response.json();
@@ -20,13 +19,15 @@ const Home = ({ navigation }) => {
       setClothing(data);
     }
     fetchData();
-  }, []);
+  }, []); */
+
+  console.log('home: ', products)
 
     return (
       <View style={globalStyles.container}>
           <Text style={globalStyles.titleText}>Willkommen!</Text>
           <FlatList
-          data={clothing.products}
+          data={products}
           renderItem={({ item }) => {
           return (
             <View>
@@ -34,6 +35,7 @@ const Home = ({ navigation }) => {
                 <Card style={globalStyles.itemCard}>
                     <Text>{item.title}</Text>
                     <Text>{item.price}</Text>
+                    <Text>{item.id}</Text>
                 </Card>
               </TouchableOpacity>
             </View>
