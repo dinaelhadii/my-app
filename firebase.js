@@ -6,17 +6,18 @@ import {
   addDoc,
   Firestore
  } from 'firebase/firestore';
+ import { Constants } from "expo-constants";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCZicFQFvgw7Ph9d-weq8lqTW1f93jGEBc",
-  authDomain: "fir-auth-eab89.firebaseapp.com",
-  projectId: "fir-auth-eab89",
-  storageBucket: "fir-auth-eab89.appspot.com",
-  messagingSenderId: "271311918832",
-  appId: "1:271311918832:web:4bbce19913bd5c52c41435"
+  apiKey: Constants.manifest?.extra?.firebaseApiKey,
+  authDomain: Constants.manifest?.extra?.firebaseAuthDomain,
+  projectId: Constants.manifest?.extra?.firebaseProjectId,
+  storageBucket: Constants.manifest?.extra?.firebaseStorageBucket,
+  messagingSenderId: Constants.manifest?.extra?.firebaseMessagingSenderId,
+  appId: Constants.manifest?.extra?.firebaseAppId,
 };
 
 // Initialize Firebase
