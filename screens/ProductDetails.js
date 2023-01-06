@@ -42,7 +42,6 @@ const ProductDetails = ({ route, navigation }) => {
                 'rating': review.rating
             }
         })
-        console.log('added review');
         setModalOpen(false);
     }
 
