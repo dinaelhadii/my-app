@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
 
-import { products } from '../firebase';
+import { products, colRef } from '../firebase';
+import { onSnapshot, getDocs } from 'firebase/firestore';
 
 const Home = ({ navigation }) => {
 
@@ -21,13 +22,21 @@ const Home = ({ navigation }) => {
     fetchData();
   }, []); */
 
-  console.log('home: ', products)
+  const [productData, setProductData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getDocs(colRef)
+      setProductData(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+    };
+    fetchData();
+  }, []);
 
     return (
       <View style={globalStyles.container}>
           <Text style={globalStyles.titleText}>Willkommen!</Text>
           <FlatList
-          data={products}
+          data={productData}
           renderItem={({ item }) => {
           return (
             <View>

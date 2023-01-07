@@ -17,7 +17,7 @@ import ReviewForm from '../screens/ReviewForm';
 const ProductDetails = ({ route, navigation }) => {
 
     const productID = route.params.id;
-    const reviewRef = collection(db, 'products', productID, 'testreview');
+    const reviewRef = collection(db, 'products', productID, 'reviews');
     //const reviewRef = 'products/' + productID + '/testreview';
     //const reviewDoc = doc(db, reviewRef)
 
@@ -48,13 +48,12 @@ const ProductDetails = ({ route, navigation }) => {
     const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
-        collection(db, 'products', productID, 'testreview');
+        collection(db, 'products', productID, 'reviews');
         const unsubscribe = onSnapshot(reviewRef, (snapshot) => {
             let reviews = [];
             snapshot.docs.forEach((doc) => {
                 reviews.push({...doc.data().review, id: doc.id})
             });
-            console.log('useEffect', reviews);
             setReviews(reviews);
         });
 

@@ -47,7 +47,6 @@ onSnapshot(colRef, (snapshot) => {
   snapshot.docs.forEach((doc) => {
     products.push({ ...doc.data(), id: doc.id })
   })
-  console.log(products);
 })
 
   // get review collection data
