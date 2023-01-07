@@ -8,7 +8,8 @@ const Wishlist = ({ route }) => {
 
     const [wishlist, setWishlist] = useState([])
     const item = route.params;
-    console.log(item);
+    const reviews = route.reviews;
+    console.log(reviews);
 
     useEffect(() => {
         if ( item && !wishlist.includes(item)) {
@@ -17,7 +18,8 @@ const Wishlist = ({ route }) => {
     }, [item])
 
     return ( 
-        <FlatList 
+        <View style={globalStyles.container}>
+            <FlatList 
             data={wishlist}
             renderItem={({ item }) => {
 
@@ -34,6 +36,7 @@ const Wishlist = ({ route }) => {
             )}}
             keyExtractor={(item) => item.id}
         />
+        </View>
     );
 }
 

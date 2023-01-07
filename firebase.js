@@ -48,22 +48,6 @@ onSnapshot(colRef, (snapshot) => {
     products.push({ ...doc.data(), id: doc.id })
   })
 })
-
-  // get review collection data
-let reviews = [];
-
-/* getDocs(revRef)
-  .then((snapshot) => {
-    snapshot.docs.forEach((doc) => {
-      reviews.push({ ...doc.data(), id: doc.id })
-    })
-    console.log(reviews);
-  })
-  .catch(err => {
-    console.log(err.message)
-  }) */
-
-
   
 const auth = getAuth(app);
 

@@ -1,6 +1,6 @@
 import { 
     View, StyleSheet, Text, Image, 
-    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard
+    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, TouchableOpacity
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { globalStyles, images } from '../styles/global';
@@ -8,8 +8,8 @@ import { globalStyles, images } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { addDoc, collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../firebase';
+import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { db, colRef, products } from '../firebase';
 
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../screens/ReviewForm';
@@ -22,13 +22,40 @@ const ProductDetails = ({ route, navigation }) => {
     //const reviewDoc = doc(db, reviewRef)
 
     const [isLiked, setIsLiked] = useState(false);
-
     const [modalOpen, setModalOpen] = useState(false);
 
-    const addToWishlist = (likedItem) => {
+    const docRef = doc(db, 'products', productID);
+
+    console.log('render');
+    console.log(isLiked);
+
+    useEffect(() => {
+        if (isLiked) {
+            addDoc(db, 'wishlist', productID, {
+                id: productID,
+                data: products.data()
+            });
+            }
+    }, [isLiked])
+
+    const [reviews, setReviews] = useState([]);
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(reviewRef, (snapshot) => {
+            let reviews = [];
+            snapshot.docs.forEach((doc) => {
+                reviews.push({...doc.data().review, id: doc.id})
+            });
+            setReviews(reviews);
+        });
+
+        return () => unsubscribe();
+      },[]);
+
+    const addLikedItem = () => {
+        console.log(isLiked);
         setIsLiked(!isLiked);
-        setItem(likedItem);
-    }
+        }
 
     const pressHandler = () => {
         navigation.navigate('Home')
@@ -44,21 +71,6 @@ const ProductDetails = ({ route, navigation }) => {
         })
         setModalOpen(false);
     }
-
-    const [reviews, setReviews] = useState([]);
-
-    useEffect(() => {
-        collection(db, 'products', productID, 'reviews');
-        const unsubscribe = onSnapshot(reviewRef, (snapshot) => {
-            let reviews = [];
-            snapshot.docs.forEach((doc) => {
-                reviews.push({...doc.data().review, id: doc.id})
-            });
-            setReviews(reviews);
-        });
-
-        return () => unsubscribe();
-      },[]);
 
     return (
         <View style={globalStyles.container}>
@@ -90,7 +102,9 @@ const ProductDetails = ({ route, navigation }) => {
             </View>
 
           <Text style={globalStyles.titleText}>{route.params.title}</Text>
-          <Ionicons name={isLiked ? "heart" : 'heart-outline'} size={24} color="black" onPress={() => addToWishlist(item)} />
+            <Ionicons 
+                name={isLiked ? "heart" : 'heart-outline'} size={24} 
+                color="black" onPress={() => addLikedItem()} />
           <Image source={route.params.image} />
           <Text style={styles.price}>{route.params.price}</Text>
 
