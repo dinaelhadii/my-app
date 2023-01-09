@@ -48,7 +48,7 @@ onSnapshot(colRef, (snapshot) => {
     products.push({ ...doc.data(), id: doc.id })
   })
 })
-  
+
 const auth = getAuth(app);
 
 export { auth, colRef, products, db };

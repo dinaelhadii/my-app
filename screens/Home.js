@@ -1,13 +1,15 @@
 import { FlatList, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useState, useEffect } from 'react';
 
-import { globalStyles } from '../styles/global';
+import { globalStyles, images } from '../styles/global';
 import Card from '../components/Card';
 
 import { products, colRef } from '../firebase';
 import { onSnapshot, getDocs } from 'firebase/firestore';
 
 const Home = ({ navigation }) => {
+
+  console.log(products);
 
 /*   useEffect(() => {
     async function fetchData() {
@@ -42,9 +44,9 @@ const Home = ({ navigation }) => {
             <View>
               <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
                 <Card style={globalStyles.itemCard}>
-                    <Text>{item.title}</Text>
+                    <Text style={globalStyles.productTitle}>{item.title}</Text>
+                    <Image source={{uri: item.image}} height={200} width={200} />
                     <Text>{item.price}</Text>
-                    <Text>{item.id}</Text>
                 </Card>
               </TouchableOpacity>
             </View>

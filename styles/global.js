@@ -15,6 +15,10 @@ export const globalStyles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10
     },
+    productTitle: {
+        fontFamily: 'nunito-bold',
+        fontSize: 18,
+    },
     text: {
         fontFamily: 'nunito-regular',
         fontSize: 14
@@ -38,7 +42,7 @@ export const globalStyles = StyleSheet.create({
 })
 
 export const images = StyleSheet.create({
-    rating: {
+    ratings: {
         '1': require('../assets/rating-1.png'),
         '2': require('../assets/rating-2.png'),
         '3': require('../assets/rating-3.png'),

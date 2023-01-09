@@ -1,6 +1,6 @@
 import { 
     View, StyleSheet, Text, Image, 
-    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, TouchableOpacity
+    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, Vibration
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { globalStyles, images } from '../styles/global';
@@ -8,8 +8,8 @@ import { globalStyles, images } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { addDoc, collection, deleteDoc, doc, getDoc, onSnapshot } from 'firebase/firestore';
-import { db, colRef, products } from '../firebase';
+import { addDoc, collection, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { db, colRef } from '../firebase';
 
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../screens/ReviewForm';
@@ -18,25 +18,20 @@ const ProductDetails = ({ route, navigation }) => {
 
     const productID = route.params.id;
     const reviewRef = collection(db, 'products', productID, 'reviews');
-    //const reviewRef = 'products/' + productID + '/testreview';
-    //const reviewDoc = doc(db, reviewRef)
+    const docRef = doc(db, 'products', productID);
 
     const [isLiked, setIsLiked] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
 
-    const docRef = doc(db, 'products', productID);
+    useEffect(() => {
+        getDoc(docRef)
+        .then((snapshot) => {
+            setIsLiked(snapshot.data().isLiked);
+        })
+    }, [])
 
     console.log('render');
     console.log(isLiked);
-
-    useEffect(() => {
-        if (isLiked) {
-            addDoc(db, 'wishlist', productID, {
-                id: productID,
-                data: products.data()
-            });
-            }
-    }, [isLiked])
 
     const [reviews, setReviews] = useState([]);
 
@@ -53,8 +48,12 @@ const ProductDetails = ({ route, navigation }) => {
       },[]);
 
     const addLikedItem = () => {
-        console.log(isLiked);
+        console.log('updating...');
+        Vibration.vibrate([400]);
         setIsLiked(!isLiked);
+        updateDoc(docRef, {
+            "isLiked": !isLiked
+        });
         }
 
     const pressHandler = () => {
@@ -105,7 +104,6 @@ const ProductDetails = ({ route, navigation }) => {
             <Ionicons 
                 name={isLiked ? "heart" : 'heart-outline'} size={24} 
                 color="black" onPress={() => addLikedItem()} />
-          <Image source={route.params.image} />
           <Text style={styles.price}>{route.params.price}</Text>
 
           <View style={styles.section}>
@@ -126,6 +124,7 @@ const ProductDetails = ({ route, navigation }) => {
                         <ReviewCard style={globalStyles.itemCard}>
                             <Text>{item.title}</Text>
                             <Text>{item.body}</Text>
+                            <Image source={(images.ratings[item.rating])} />
                         </ReviewCard>
                     </View>
                     )}}

@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log('Logged in with: ', user.email);
-                Vibration.vibrate([500, 100, 500]);
+                Vibration.vibrate([400]);
             })
             .catch(error => alert(error.message));
     }
