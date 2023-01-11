@@ -4,4 +4,4 @@ ShoppingSky
 - Die App wird gestartet, indem man den Befehl "npm expo start" oder "npm start" in die Konsole eingibt
 
 
-Link zum GitHub Repository:
+Link zum GitHub Repository: https://github.com/dinaelhadii/my-app.git
