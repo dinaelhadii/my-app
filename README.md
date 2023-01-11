@@ -1,4 +1,5 @@
 ShoppingSky
+
 Unsere App fokussiert sich auf den E-Commerce, es soll den User eine Minimalistische und unkomplizierte Plattform bieten, einzukaufen. Zu dem fokkusieren wir uns auf transparenz, indem wir die Bewertungen der User ungefiltert anzeigen 
 
 - Autoren:  Dina El-Hadi, Munzur Yalcin
