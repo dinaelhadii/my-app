@@ -16,6 +16,13 @@ function LoginStack() {
                 }}
             />
             <Stack.Screen 
+                name='Register'
+                component={Register}
+                options={{   
+                    gestureEnabled: false           
+                }}
+            />
+            <Stack.Screen 
                 name='NavBar'
                 component={NavBar}
                 options={{

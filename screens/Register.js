@@ -1,13 +1,14 @@
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, Platform } from "react-native";
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase";
-import { addDoc, onSnapshot, collection, getDoc } from "firebase/firestore";
+import { addDoc, onSnapshot, collection, getDoc, query } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { FontAwesome } from '@expo/vector-icons';
 import { Vibration } from "react-native";
 
-const Login = ({ navigation }) => {
+const Register = ({ navigation }) => {
 
+    const [userName, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,19 +16,23 @@ const Login = ({ navigation }) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             if (user) {
                 navigation.navigate('NavBar', userName)
+                Vibration.vibrate([400]);
             }
         });
         return unsubscribe;
     }, [])
 
-    const handleLogin = () => {
-        signInWithEmailAndPassword(auth, email, password)
+    const handleSignUp = () => {
+        createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
-                console.log('Logged in with: ', user.email);
-                Vibration.vibrate([400]);
+                console.log('Registered with', user.email);
+                addDoc(collection(db, 'users'), {
+                    userName: userName,
+                    userMail: email,
+                })
             })
-            .catch(error => alert(error.message));
+            .catch(error => alert(error.message))
     }
 
     function dismissKeyboard() {
@@ -44,6 +49,14 @@ const Login = ({ navigation }) => {
                 <FontAwesome name="shopping-bag" size={80} color="black" />
                 </View>
             <View style={styles.inputContainer}>
+                    <TextInput 
+                        placeholder='Name'
+                        autoCapitalize=''
+                        keyboardType=''
+                        value={userName}
+                        onChangeText={text => setName(text)}
+                        style={styles.input}
+                    />
                     <TextInput 
                         placeholder='Email'
                         autoCapitalize='none'
@@ -62,9 +75,9 @@ const Login = ({ navigation }) => {
                 </View>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
-                        onPress={() => handleLogin()}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}>Login</Text>
+                        onPress={() => handleSignUp()}
+                        style={[styles.button, styles.buttonOutLine]}>
+                        <Text style={styles.buttonOutlineText}>Register</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
@@ -124,4 +137,4 @@ const styles = StyleSheet.create({
     }
 })
  
-export default Login;
+export default Register;
