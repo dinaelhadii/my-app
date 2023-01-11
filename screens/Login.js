@@ -1,7 +1,8 @@
-import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text } from "react-native";
+import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, Platform } from "react-native";
 import { useState, useEffect } from "react";
 import { globalStyles } from "../styles/global";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
+import { addDoc, onSnapshot, collection, getDoc, query } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { FontAwesome } from '@expo/vector-icons';
 import { Vibration } from "react-native";
@@ -17,8 +18,7 @@ const Login = ({ navigation }) => {
             if (user) {
                 navigation.navigate('NavBar', userName)
             }
-        })
-
+        });
         return unsubscribe;
     }, [])
 
@@ -37,12 +37,22 @@ const Login = ({ navigation }) => {
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log('Registered with', user.email);
+                addDoc(collection(db, 'users'), {
+                    userName: userName,
+                    userMail: email,
+                })
             })
             .catch(error => alert(error.message))
     }
 
+    function dismissKeyboard() {
+        if (Platform.OS != "web") {
+            Keyboard.dismiss();
+        }
+    }
+
     return ( 
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
             <KeyboardAvoidingView style={styles.container}
             behavior='padding'>
                 <View style={styles.appLogo}>

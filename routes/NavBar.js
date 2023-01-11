@@ -10,7 +10,10 @@ import ProfileStack from './ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
-function NavBar({ userName }) {
+function NavBar({ userName, route }) {
+
+  console.log('Navbar.', route.params)
+
   return (
     <Tab.Navigator screenOptions={{headerTitleStyle: {
       fontFamily: 'nunito-bold',

@@ -7,6 +7,7 @@ import { onSnapshot } from 'firebase/firestore';
 
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
+import CheckoutButton from '../components/CheckoutButton';
 
 const Cart = () => {
 
@@ -29,19 +30,21 @@ const Cart = () => {
         <View style={globalStyles.container}>
             <Text style={globalStyles.text}>Warenkorbinhalt</Text>
             <FlatList 
+            style={styles.list}
             data={shopCart}
             renderItem={({ item }) => {
 
             return (
             <TouchableOpacity>
-                <Card style={globalStyles.itemCard}>
+                <Card>
                     <Text style={globalStyles.productTitle}>{item.title}</Text>
                     <Text>{item.price}</Text>
                 </Card>
             </TouchableOpacity>
             )}}
             keyExtractor={(item) => item.id}
-        />
+            />
+            <CheckoutButton />
         </View>
      );
 }
@@ -50,8 +53,10 @@ const styles = StyleSheet.create({
     image: {
         width: 100,
         height: 100
-    }
-    
+    },
+    list: {
+        flex: 1
+    },
 })
 
  

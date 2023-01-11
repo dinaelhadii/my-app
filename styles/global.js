@@ -23,9 +23,6 @@ export const globalStyles = StyleSheet.create({
         fontFamily: 'nunito-regular',
         fontSize: 14
     },
-    itemCard: {
-        padding: 10,
-      },
       impressum: {
         flex: 1,
         justifyContent: 'flex-end'

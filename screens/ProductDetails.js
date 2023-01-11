@@ -1,6 +1,6 @@
 import { 
     View, StyleSheet, Text, Image, 
-    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, Vibration
+    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, Vibration, Platform
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { globalStyles, images } from '../styles/global';
@@ -29,9 +29,6 @@ const ProductDetails = ({ route, navigation }) => {
             setIsLiked(snapshot.data().isLiked);
         })
     }, [])
-
-    console.log('render');
-    console.log(isLiked);
 
     const [reviews, setReviews] = useState([]);
 
@@ -71,12 +68,18 @@ const ProductDetails = ({ route, navigation }) => {
         setModalOpen(false);
     }
 
+    function dismissKeyboard() {
+        if (Platform.OS != "web") {
+            Keyboard.dismiss();
+        }
+    }
+
     return (
         <View style={globalStyles.container}>
 
             <Modal visible={modalOpen} animationType='slide'>
                 <TouchableWithoutFeedback
-                onPress={Keyboard.dismiss}>
+                onPress={() => dismissKeyboard()}>
                     <View style={globalStyles.container}>
                         <MaterialIcons 
                         name='close'

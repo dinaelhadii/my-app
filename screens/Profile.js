@@ -15,10 +15,10 @@ const Profile = ({ navigation }) => {
     }
 
     const profileOps = [
-        {title: 'My Orders', key: '1'},
-        {title: 'Subscriptions', key: '2'},
-        {title: 'Personal Data', key: '3'},
-        {title: 'App Settings', key: '4'},
+        {title: 'Meine Bestellungen', key: '1'},
+        {title: 'Abonnements', key: '2'},
+        {title: 'Persönliche Daten', key: '3'},
+        {title: 'App-Einstellungen', key: '4'},
         {title: 'Log Out', key: '5'},
     ]
 

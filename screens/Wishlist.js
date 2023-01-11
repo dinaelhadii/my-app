@@ -33,11 +33,11 @@ const Wishlist = ({ route }) => {
           return () => unsubscribe();
     }, []);
 
-    const addToCart = (id) => {
+    const addToCart = (item) => {
         Vibration.vibrate([400]);
         setIsCart(!isCart);
-        updateDoc(doc(db, 'products', id), {
-            "isCart": !isCart
+        updateDoc(doc(db, 'products', item.id), {
+            "isCart": !item.isCart
         });
     }
 
@@ -48,14 +48,14 @@ const Wishlist = ({ route }) => {
             renderItem={({ item }) => {
 
             return (
-            <TouchableOpacity>
-                <Card style={globalStyles.itemCard}>
+            <TouchableOpacity style={styles.card}>
+                <Card>
                     <Text style={globalStyles.productTitle}>{item.title}</Text>
                     <Text>{item.price}</Text>
                     <View style={styles.sCart}>
-                        <MaterialIcons name={isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={24} 
+                        <MaterialIcons name={item.isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={24} 
                             color="black"
-                            onPress={() => addToCart(item.id)} />
+                            onPress={() => addToCart(item)} />
                     </View>
                 </Card>
             </TouchableOpacity>
@@ -69,7 +69,9 @@ const Wishlist = ({ route }) => {
 const styles = StyleSheet.create({
     sCart: {
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        paddingTop: 5,
+        paddingBottom: 5
     }
 })
 

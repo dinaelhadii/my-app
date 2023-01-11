@@ -7,24 +7,11 @@ import Card from '../components/Card';
 import { products, colRef } from '../firebase';
 import { onSnapshot, getDocs } from 'firebase/firestore';
 
-const Home = ({ navigation }) => {
-
-  console.log(products);
-
-/*   useEffect(() => {
-    async function fetchData() {
-      const response = await fetch('https://dummyjson.com/products?limit=100&skip=10');
-      const data = await response.json();
-      data.products = data.products.filter(
-        product => product.category === "womens-dresses" || 
-        product.category === "womens-shoes" || product.category === "mens-shirts" ||
-        product.category === "mens-shoes" ||  product.category === "womens-bags");
-      setClothing(data);
-    }
-    fetchData();
-  }, []); */
+const Home = ({ navigation, route }) => {
 
   const [productData, setProductData] = useState([]);
+  const userName = route.params
+  console.log(userName)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,9 +30,9 @@ const Home = ({ navigation }) => {
           return (
             <View>
               <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
-                <Card style={globalStyles.itemCard}>
+                <Card>
                     <Text style={globalStyles.productTitle}>{item.title}</Text>
-                    <Image source={{uri: item.image}} height={200} width={200} />
+                    <Image source={{uri: item.image}} style={{width: 200, height: 200}} />
                     <Text>{item.price}</Text>
                 </Card>
               </TouchableOpacity>
