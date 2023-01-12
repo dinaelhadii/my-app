@@ -8,8 +8,8 @@ import { globalStyles, images } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { addDoc, collection, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
-import { db, colRef } from '../firebase';
+import { addDoc, collection, doc, getDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { db, colRef, auth } from '../firebase';
 
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../screens/ReviewForm';
@@ -18,17 +18,51 @@ const ProductDetails = ({ route, navigation }) => {
 
     const productID = route.params.id;
     const reviewRef = collection(db, 'products', productID, 'reviews');
-    const docRef = doc(db, 'products', productID);
+    const userDoc = doc(db, 'users', auth.currentUser?.uid);
 
     const [isLiked, setIsLiked] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
-        getDoc(docRef)
-        .then((snapshot) => {
-            setIsLiked(snapshot.data().isLiked);
-        })
+        const fetchIsLiked = async () => {
+            await getDoc(userDoc)
+            .then((snapshot) => {
+                snapshot.data().wishlist.forEach((product) => {
+                    if (product.title == route.params.title) {
+                        setIsLiked(true);
+                        setIsEmpty(false);
+                    } else if (snapshot.data().wishlist === []) {
+                        setIsLiked(false);
+                        setIsEmpty(true);
+                    }
+                })
+            })
+        }
+        fetchIsLiked();
     }, [])
+
+    useEffect(() => {
+        let likedItem = {};
+        likedItem = {
+            title: route.params.title,
+            price: route.params.price,
+            description: route.params.description,
+            image: route.params.image,
+            id: route.params.id,
+            isCart: false,
+        }
+        if (isLiked == true) {
+            updateDoc(userDoc, {
+                wishlist: arrayUnion(likedItem)
+            });
+        } else if (isLiked == false && isEmpty == false) {
+            console.log('deleting item');
+            updateDoc(userDoc, {
+                wishlist: arrayRemove(likedItem)
+            });
+        }
+    }, [isLiked])
 
     const [reviews, setReviews] = useState([]);
 
@@ -45,13 +79,10 @@ const ProductDetails = ({ route, navigation }) => {
       },[]);
 
     const addLikedItem = () => {
-        console.log('updating...');
+        console.log('toggling like button')
         Vibration.vibrate([400]);
         setIsLiked(!isLiked);
-        updateDoc(docRef, {
-            "isLiked": !isLiked
-        });
-        }
+    }
 
     const pressHandler = () => {
         navigation.navigate('Home')
@@ -103,11 +134,21 @@ const ProductDetails = ({ route, navigation }) => {
                 />
             </View>
 
-          <Text style={globalStyles.titleText}>{route.params.title}</Text>
-            <Ionicons 
-                name={isLiked ? "heart" : 'heart-outline'} size={24} 
-                color="black" onPress={() => addLikedItem()} />
-          <Text style={styles.price}>{route.params.price}</Text>
+            <View>
+                <Text style={globalStyles.titleText}>{route.params.title}</Text>
+                <Ionicons 
+                    name={isLiked ? "heart" : 'heart-outline'} size={24} 
+                    color="black" onPress={() => addLikedItem()} />
+                <Image 
+                    source={{uri: route.params.image}}
+                    style={{
+                        width: 200, height: 160, 
+                        resizeMode: 'contain', alignSelf: 'center',
+                        margin: 10,
+                        }}
+                />
+                <Text style={styles.price}>{route.params.price}</Text>
+            </View>
 
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Beschreibung</Text>
