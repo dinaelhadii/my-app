@@ -8,6 +8,8 @@ const Impressum = ({ route }) => {
             <View>
                 <Text style={globalStyles.text}>
                     ShoppingSky.de GmbH {"\n"} {"\n"}
+                    Dina El-Hadi {"\n"}
+                    Munzur Yalcin {"\n"} {"\n"}
                     Musterstr. 40 {"\n"}
                     42732 Musterstadt {"\n"}
                     Deutschland {"\n"}

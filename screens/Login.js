@@ -11,15 +11,6 @@ const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                navigation.navigate('NavBar', userName)
-            }
-        });
-        return unsubscribe;
-    }, [])
-
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
@@ -65,6 +56,11 @@ const Login = ({ navigation }) => {
                         onPress={() => handleLogin()}
                         style={styles.button}>
                         <Text style={styles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate('Register')}
+                        style={[styles.button, styles.buttonOutLine]}>
+                        <Text style={styles.buttonOutlineText}>Register</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>

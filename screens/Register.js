@@ -1,36 +1,31 @@
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, Platform } from "react-native";
 import { useState, useEffect } from "react";
 import { auth, db } from "../firebase";
-import { addDoc, onSnapshot, collection, getDoc, query } from "firebase/firestore";
+import { addDoc, setDoc, onSnapshot, collection, doc, getDoc, query } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { FontAwesome } from '@expo/vector-icons';
 import { Vibration } from "react-native";
 
 const Register = ({ navigation }) => {
 
-    const [userName, setName] = useState('');
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                navigation.navigate('NavBar', userName)
-                Vibration.vibrate([400]);
-            }
-        });
-        return unsubscribe;
-    }, [])
 
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
                 console.log('Registered with', user.email);
-                addDoc(collection(db, 'users'), {
-                    userName: userName,
-                    userMail: email,
-                })
+                setDoc(doc(db, 'users', user.uid), {
+                    name: name,
+                    email: email,
+                    password: password,
+                    id: user.uid,
+                    wishlist: [],
+                });
+                navigation.navigate('NavBar');
+                Vibration.vibrate([400]);
             })
             .catch(error => alert(error.message))
     }
@@ -53,7 +48,7 @@ const Register = ({ navigation }) => {
                         placeholder='Name'
                         autoCapitalize=''
                         keyboardType=''
-                        value={userName}
+                        value={name}
                         onChangeText={text => setName(text)}
                         style={styles.input}
                     />
@@ -76,8 +71,8 @@ const Register = ({ navigation }) => {
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity 
                         onPress={() => handleSignUp()}
-                        style={[styles.button, styles.buttonOutLine]}>
-                        <Text style={styles.buttonOutlineText}>Register</Text>
+                        style={styles.button}>
+                        <Text style={styles.buttonText}>Register</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
@@ -124,17 +119,6 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16,
     },
-    buttonOutLine: {
-        backgroundColor: '#fff',
-        marginTop: 5,
-        borderColor: '#0782F9',
-        borderWidth: 2,
-    },
-    buttonOutlineText: {
-        color: '#0782F9',
-        fontWeight: '700',
-        fontSize: 16,
-    }
 })
  
 export default Register;

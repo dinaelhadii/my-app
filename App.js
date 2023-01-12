@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+
+// import from firebase
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase';
+
+// import components
+import NavBar from './routes/NavBar';
 import LoginStack from './routes/LoginStack';
 
 SplashScreen.preventAutoHideAsync();
@@ -10,6 +17,7 @@ SplashScreen.preventAutoHideAsync();
 export default function App() {
 
   const [appIsReady, setAppIsReady] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     async function prepare() {
@@ -23,12 +31,19 @@ export default function App() {
         console.warn(e);
       } finally {
         // Tell the application to render
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+          if (user) {
+            setIsLoggedIn(true);
+          } else {
+            setIsLoggedIn(false);
+          }
+        });
         setAppIsReady(true);
-        onLayoutRootView()
+        return unsubscribe;
       }
     }
-
     prepare();
+
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
@@ -50,7 +65,11 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <LoginStack />
+      {isLoggedIn && appIsReady  ? (
+        <NavBar />
+      ) : (
+        <LoginStack />
+      )}
       <StatusBar></StatusBar>
   </NavigationContainer>
   );

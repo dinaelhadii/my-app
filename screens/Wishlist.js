@@ -4,8 +4,8 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native';
 import { StyleSheet, Vibration } from 'react-native';
 
 // import from firebase and firebase-related files
-import { products, colRef, db } from '../firebase';
-import { onSnapshot, getDoc, updateDoc, doc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import { onSnapshot, getDoc, updateDoc, doc, arrayRemove, arrayUnion } from 'firebase/firestore';
 
 // import styles and components
 import { globalStyles } from '../styles/global';
@@ -17,29 +17,33 @@ import { MaterialIcons } from '@expo/vector-icons';
 const Wishlist = ({ route }) => {
 
     const [wishlist, setWishlist] = useState([]);
-
+    const [isEmpty, setIsEmpty] = useState(true);
     const [isCart, setIsCart] = useState(false);
+    const [product, setProduct] = useState();
+
+    const userDoc = doc(db, 'users', auth.currentUser?.uid);
+
+    let cartItem = {};
 
     useEffect(() => {
-        let unsubscribe = onSnapshot(colRef, (snapshot) => {
-            let wishlist = [];
-            snapshot.docs.forEach((doc) => {
-                if (doc.data().isLiked === true) {
-                    wishlist.push({ ...doc.data(), id: doc.id });
-                }
-            });
-            setWishlist(wishlist);
-          });
-          return () => unsubscribe();
-    }, []);
-
-    const addToCart = (item) => {
-        Vibration.vibrate([400]);
-        setIsCart(!isCart);
-        updateDoc(doc(db, 'products', item.id), {
-            "isCart": !item.isCart
+        let unsubscribe = onSnapshot(userDoc, (snapshot) => {
+            setWishlist(snapshot.data().wishlist)
         });
-    }
+        return () => unsubscribe();
+    }, [])
+
+/*     const toggleCart = (item) => {
+        Vibration.vibrate([400]);
+        setIsCart(!item.isCart);
+        cartItem = {
+            title: item.title,
+            price: item.price,
+            description: item.description,
+            image: item.image,
+            id: item.id
+        }
+        setProduct(cartItem);
+    } */
 
     return ( 
         <View style={globalStyles.container}>
@@ -55,7 +59,7 @@ const Wishlist = ({ route }) => {
                     <View style={styles.sCart}>
                         <MaterialIcons name={item.isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={24} 
                             color="black"
-                            onPress={() => addToCart(item)} />
+                            onPress={() => toggleCart(item)} />
                     </View>
                 </Card>
             </TouchableOpacity>

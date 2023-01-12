@@ -10,9 +10,7 @@ import ProfileStack from './ProfileStack';
 
 const Tab = createBottomTabNavigator();
 
-function NavBar({ userName, route }) {
-
-  console.log('Navbar.', route.params)
+function NavBar() {
 
   return (
     <Tab.Navigator screenOptions={{headerTitleStyle: {
@@ -28,7 +26,6 @@ function NavBar({ userName, route }) {
           tabBarIcon: ({color, focused}) => 
           (<Feather name ='home' size={focused ? 30 : 24} color={color} />)
         }}
-        userName={userName}
         />
         <Tab.Screen 
         name="Wunschliste" 

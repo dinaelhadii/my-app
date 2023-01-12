@@ -4,14 +4,14 @@ import { useState, useEffect } from 'react';
 import { globalStyles, images } from '../styles/global';
 import Card from '../components/Card';
 
-import { products, colRef } from '../firebase';
-import { onSnapshot, getDocs } from 'firebase/firestore';
+import { products, colRef, auth, db } from '../firebase';
+import { onSnapshot, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
-const Home = ({ navigation, route }) => {
+const Home = ({ navigation }) => {
 
   const [productData, setProductData] = useState([]);
-  const userName = route.params
-  console.log(userName)
+
+  const [name, setName] = useState('')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,11 +19,17 @@ const Home = ({ navigation, route }) => {
       setProductData(data.docs.map(doc => ({ ...doc.data(), id: doc.id })));
     };
     fetchData();
+
+    const userDoc = doc(db, 'users', auth.currentUser?.uid);
+    getDoc(userDoc)
+      .then((snapshot) => {
+        setName(snapshot.data().name);
+      })
   }, []);
 
     return (
       <View style={globalStyles.container}>
-          <Text style={globalStyles.titleText}>Willkommen!</Text>
+          <Text style={globalStyles.titleText}>Willkommen {name}!</Text>
           <FlatList
           data={productData}
           renderItem={({ item }) => {
@@ -32,7 +38,13 @@ const Home = ({ navigation, route }) => {
               <TouchableOpacity onPress={() => navigation.navigate('ProductDetails', item)}>
                 <Card>
                     <Text style={globalStyles.productTitle}>{item.title}</Text>
-                    <Image source={{uri: item.image}} style={{width: 200, height: 200}} />
+                    <Image 
+                      source={{uri: item.image}} 
+                      style={{
+                        width: 200, height: 120, 
+                        resizeMode: 'contain', alignSelf: 'center',
+                        margin: 10,
+                        }} />
                     <Text>{item.price}</Text>
                 </Card>
               </TouchableOpacity>
