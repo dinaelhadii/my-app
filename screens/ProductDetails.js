@@ -1,16 +1,20 @@
+// import from react and react-native
+import { useState, useEffect } from 'react';
 import { 
-    View, StyleSheet, Text, Image, 
+    View, ScrollView, StyleSheet, Text, Image, 
     Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, Vibration, Platform
 } from 'react-native';
-import { useState, useEffect } from 'react';
-import { globalStyles, images } from '../styles/global';
 
+// import icons
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
+// import from firebase and firebase-related files
 import { addDoc, collection, doc, getDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db, colRef, auth } from '../firebase';
 
+// import styles and components
+import { globalStyles, images } from '../styles/global';
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../screens/ReviewForm';
 
@@ -21,7 +25,9 @@ const ProductDetails = ({ route, navigation }) => {
     const userDoc = doc(db, 'users', auth.currentUser?.uid);
 
     const [isLiked, setIsLiked] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(true);
+    const [isCart, setIsCart] = useState(false);
+    const [isWishlistEmpty, setIsWishlistEmpty] = useState(true);
+    const [isCartEmpty, setIsCartEmpty] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
@@ -31,15 +37,24 @@ const ProductDetails = ({ route, navigation }) => {
                 snapshot.data().wishlist.forEach((product) => {
                     if (product.title == route.params.title) {
                         setIsLiked(true);
-                        setIsEmpty(false);
-                    } else if (snapshot.data().wishlist === []) {
-                        setIsLiked(false);
-                        setIsEmpty(true);
+                        setIsWishlistEmpty(false);
+                    }
+                })
+            })
+        }
+        const fetchIsCart = async () => {
+            await getDoc(userDoc)
+            .then((snapshot) => {
+                snapshot.data().cart.forEach((product) => {
+                    if (product.title == route.params.title) {
+                        setIsCart(true);
+                        setIsCartEmpty(false);
                     }
                 })
             })
         }
         fetchIsLiked();
+        fetchIsCart();
     }, [])
 
     useEffect(() => {
@@ -56,13 +71,35 @@ const ProductDetails = ({ route, navigation }) => {
             updateDoc(userDoc, {
                 wishlist: arrayUnion(likedItem)
             });
-        } else if (isLiked == false && isEmpty == false) {
+        } else if (isLiked == false && isWishlistEmpty == false) {
             console.log('deleting item');
             updateDoc(userDoc, {
                 wishlist: arrayRemove(likedItem)
             });
         }
     }, [isLiked])
+
+    useEffect(() => {
+        let cartedItem = {};
+        cartedItem = {
+            title: route.params.title,
+            price: route.params.price,
+            description: route.params.description,
+            image: route.params.image,
+            id: route.params.id,
+        }
+        if (isCart == true) {
+            console.log('adding to cart')
+            updateDoc(userDoc, {
+                cart: arrayUnion(cartedItem)
+            });
+        } else if (isCart == false && isCartEmpty == false) {
+            console.log('deleting item from cart');
+            updateDoc(userDoc, {
+                cart: arrayRemove(cartedItem)
+            });
+        }
+    }, [isCart])
 
     const [reviews, setReviews] = useState([]);
 
@@ -82,6 +119,11 @@ const ProductDetails = ({ route, navigation }) => {
         console.log('toggling like button')
         Vibration.vibrate([400]);
         setIsLiked(!isLiked);
+    }
+
+    const toggleCart = () => {
+        Vibration.vibrate([400]);
+        setIsCart(!isCart)
     }
 
     const pressHandler = () => {
@@ -106,7 +148,7 @@ const ProductDetails = ({ route, navigation }) => {
     }
 
     return (
-        <View style={globalStyles.container}>
+        <View style={[globalStyles.container, {flex: 1}]}>
 
             <Modal visible={modalOpen} animationType='slide'>
                 <TouchableWithoutFeedback
@@ -124,58 +166,61 @@ const ProductDetails = ({ route, navigation }) => {
                 </TouchableWithoutFeedback>
             </Modal>
 
-            <View style={styles.backButton}>
-                <Ionicons name="chevron-back" size={22} 
-                color="#007AFF" 
-                onPress={() => pressHandler()}/>
-                <Button 
-                    title={'Back'}    
-                    onPress={() => pressHandler()}
-                />
+            <View style={{flex: 2}}>
+                <View style={styles.backButton}>
+                    <Ionicons name="chevron-back" size={22} 
+                    color="#007AFF" 
+                    onPress={() => pressHandler()}/>
+                    <Button 
+                        title={'Back'}    
+                        onPress={() => pressHandler()}
+                    />
+                </View>
+
+                <View>
+                    <Text style={globalStyles.titleText}>{route.params.title}</Text>
+                    <Ionicons 
+                        name={isLiked ? "heart" : 'heart-outline'} size={24} 
+                        color="black" onPress={() => addLikedItem()} />
+                    <MaterialIcons 
+                        name={isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={24} 
+                        color="black"
+                        onPress={() => toggleCart()} />
+                    <Image 
+                        source={{uri: route.params.image}}
+                        style={{
+                            width: 200, height: 200, 
+                            resizeMode: 'contain', alignSelf: 'center',
+                            margin: 10,
+                            }}
+                    />
+                    <Text style={styles.price}>{route.params.price}</Text>
+                </View>
+
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Beschreibung</Text>
+                    <Text style={styles.description}>{route.params.description}</Text>
+                </View>
             </View>
 
-            <View>
-                <Text style={globalStyles.titleText}>{route.params.title}</Text>
-                <Ionicons 
-                    name={isLiked ? "heart" : 'heart-outline'} size={24} 
-                    color="black" onPress={() => addLikedItem()} />
-                <Image 
-                    source={{uri: route.params.image}}
-                    style={{
-                        width: 200, height: 160, 
-                        resizeMode: 'contain', alignSelf: 'center',
-                        margin: 10,
-                        }}
+            <View style={{flex: 1, marginTop: 10}}>
+                <Text style={styles.sectionTitle}>Bewertungen</Text>
+                <FlatList 
+                    data={reviews}
+                    renderItem={({ item }) => {
+                        return (
+                        <View>
+                            <ReviewCard style={globalStyles.itemCard}>
+                                <Text>{item.title}</Text>
+                                <Text>{item.body}</Text>
+                                <Image source={(images.ratings[item.rating])} />
+                            </ReviewCard>
+                        </View>
+                        )}}
+                        keyExtractor={(item) => item.id}
                 />
-                <Text style={styles.price}>{route.params.price}</Text>
+                <Button title={'Bewertung hinzufügen...'} onPress={() => setModalOpen(true)} />
             </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Beschreibung</Text>
-            <Text style={styles.description}>{route.params.description}</Text>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Bewertungen</Text>
-          </View>
-
-          <View style={{flex: 1}}>
-            <FlatList 
-                data={reviews}
-                renderItem={({ item }) => {
-                    return (
-                    <View>
-                        <ReviewCard style={globalStyles.itemCard}>
-                            <Text>{item.title}</Text>
-                            <Text>{item.body}</Text>
-                            <Image source={(images.ratings[item.rating])} />
-                        </ReviewCard>
-                    </View>
-                    )}}
-                    keyExtractor={(item) => item.id}
-            />
-            <Button title={'Bewertung hinzufügen...'} onPress={() => setModalOpen(true)} />
-          </View>
           
         </View>
       );

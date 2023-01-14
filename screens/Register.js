@@ -23,6 +23,7 @@ const Register = ({ navigation }) => {
                     password: password,
                     id: user.uid,
                     wishlist: [],
+                    cart: []
                 });
                 navigation.navigate('NavBar');
                 Vibration.vibrate([400]);

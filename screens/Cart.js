@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList } from 'react-native';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
-import { colRef } from '../firebase';
-import { onSnapshot } from 'firebase/firestore';
+import { colRef, db, auth } from '../firebase';
+import { onSnapshot, userDoc, doc } from 'firebase/firestore';
 
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
@@ -11,20 +11,16 @@ import CheckoutButton from '../components/CheckoutButton';
 
 const Cart = () => {
 
+    const userDoc = doc(db, 'users', auth.currentUser?.uid);
+
     const [shopCart, setShopCart] = useState([]);
 
     useEffect(() => {
-        let unsubscribe = onSnapshot(colRef, (snapshot) => {
-            let shopCart = [];
-            snapshot.docs.forEach((doc) => {
-                if (doc.data().isCart === true) {
-                    shopCart.push({ ...doc.data(), id: doc.id });
-                }
-            });
-            setShopCart(shopCart);
-          });
-          return () => unsubscribe();
-    }, []);
+        let unsubscribe = onSnapshot(userDoc, (snapshot) => {
+            setShopCart(snapshot.data().cart)
+        });
+        return () => unsubscribe();
+    }, [])
 
     return ( 
         <View style={globalStyles.container}>

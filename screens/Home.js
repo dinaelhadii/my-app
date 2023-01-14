@@ -1,11 +1,14 @@
-import { FlatList, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
+// import from react and react-native
 import { useState, useEffect } from 'react';
+import { FlatList, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
-import { globalStyles, images } from '../styles/global';
-import Card from '../components/Card';
-
+// import from firebase and firebase-related files
 import { products, colRef, auth, db } from '../firebase';
 import { onSnapshot, collection, getDocs, doc, getDoc } from 'firebase/firestore';
+
+// import styles and components
+import { globalStyles, images } from '../styles/global';
+import Card from '../components/Card';
 
 const Home = ({ navigation }) => {
 
@@ -41,7 +44,7 @@ const Home = ({ navigation }) => {
                     <Image 
                       source={{uri: item.image}} 
                       style={{
-                        width: 200, height: 120, 
+                        width: 200, height: 150, 
                         resizeMode: 'contain', alignSelf: 'center',
                         margin: 10,
                         }} />

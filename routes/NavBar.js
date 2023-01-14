@@ -13,10 +13,14 @@ const Tab = createBottomTabNavigator();
 function NavBar() {
 
   return (
-    <Tab.Navigator screenOptions={{headerTitleStyle: {
+    <Tab.Navigator screenOptions={
+      {headerTitleStyle: {
       fontFamily: 'nunito-bold',
       fontSize: 25
-    }}}>
+      },
+      tabBarInactiveTintColor: 'black'
+      }
+      }>
       <Tab.Screen 
         name="HomeStack" 
         component={HomeStack} 
