@@ -72,7 +72,7 @@ const ProductDetails = ({ route, navigation }) => {
                 wishlist: arrayUnion(likedItem)
             });
         } else if (isLiked == false && isWishlistEmpty == false) {
-            console.log('deleting item');
+            console.log('deleting item from wishlist');
             updateDoc(userDoc, {
                 wishlist: arrayRemove(likedItem)
             });
@@ -166,7 +166,7 @@ const ProductDetails = ({ route, navigation }) => {
                 </TouchableWithoutFeedback>
             </Modal>
 
-            <View style={{flex: 2}}>
+            <View>
                 <View style={styles.backButton}>
                     <Ionicons name="chevron-back" size={22} 
                     color="#007AFF" 
@@ -203,7 +203,7 @@ const ProductDetails = ({ route, navigation }) => {
                 </View>
             </View>
 
-            <View style={{flex: 1, marginTop: 10}}>
+            <View style={{marginTop: 10}}>
                 <Text style={styles.sectionTitle}>Bewertungen</Text>
                 <FlatList 
                     data={reviews}

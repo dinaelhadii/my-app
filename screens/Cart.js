@@ -34,6 +34,14 @@ const Cart = () => {
             <TouchableOpacity>
                 <Card>
                     <Text style={globalStyles.productTitle}>{item.title}</Text>
+                    <Image 
+                    source={{uri: item.image}}
+                    style={{
+                        width: 200, height: 120, 
+                        resizeMode: 'contain', alignSelf: 'center',
+                        margin: 10,
+                        }}
+                    />
                     <Text>{item.price}</Text>
                 </Card>
             </TouchableOpacity>

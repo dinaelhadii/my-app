@@ -1,12 +1,13 @@
 // import from react and react-native
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Vibration, StyleSheet } from 'react-native';
+import { Vibration, StyleSheet, Alert } from 'react-native';
 
 
 const CheckoutButton = () => {
 
     const checkoutHandler = () => {
-        Vibration.vibrate()
+        Vibration.vibrate();
+        Alert.alert('Vielen Dank für deinen Einkauf!', 'Eine Bestätigungsmail wurde soeben an dich geschickt.');
     }
 
     return ( 
