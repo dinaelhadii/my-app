@@ -1,8 +1,8 @@
 // import from react and react-native
 import { useState, useEffect } from 'react';
 import { 
-    View, ScrollView, StyleSheet, Text, Image, 
-    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, Vibration, Platform
+    View, ScrollView, SafeAreaView, StyleSheet, Text, Image, 
+    Button, FlatList, Modal, TouchableOpacity, Keyboard, Vibration, Platform, SectionList
 } from 'react-native';
 
 // import icons
@@ -10,25 +10,22 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // import from firebase and firebase-related files
-import { addDoc, collection, doc, getDoc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-import { db, colRef, auth } from '../firebase';
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { db, auth } from '../firebase';
 
 // import styles and components
-import { globalStyles, images } from '../styles/global';
-import ReviewCard from '../components/ReviewCard';
-import ReviewForm from '../screens/ReviewForm';
+import { globalStyles } from '../styles/global';
+import BackButton from '../components/BackButton';
 
 const ProductDetails = ({ route, navigation }) => {
 
-    const productID = route.params.id;
-    const reviewRef = collection(db, 'products', productID, 'reviews');
     const userDoc = doc(db, 'users', auth.currentUser?.uid);
 
     const [isLiked, setIsLiked] = useState(false);
     const [isCart, setIsCart] = useState(false);
     const [isWishlistEmpty, setIsWishlistEmpty] = useState(true);
     const [isCartEmpty, setIsCartEmpty] = useState(true);
-    const [modalOpen, setModalOpen] = useState(false);
+
 
     useEffect(() => {
         const fetchIsLiked = async () => {
@@ -101,20 +98,6 @@ const ProductDetails = ({ route, navigation }) => {
         }
     }, [isCart])
 
-    const [reviews, setReviews] = useState([]);
-
-    useEffect(() => {
-        const unsubscribe = onSnapshot(reviewRef, (snapshot) => {
-            let reviews = [];
-            snapshot.docs.forEach((doc) => {
-                reviews.push({...doc.data().review, id: doc.id})
-            });
-            setReviews(reviews);
-        });
-
-        return () => unsubscribe();
-      },[]);
-
     const addLikedItem = () => {
         console.log('toggling like button')
         Vibration.vibrate([400]);
@@ -123,60 +106,18 @@ const ProductDetails = ({ route, navigation }) => {
 
     const toggleCart = () => {
         Vibration.vibrate([400]);
-        setIsCart(!isCart)
+        setIsCart(!isCart);
     }
-
-    const pressHandler = () => {
-        navigation.navigate('Home')
-    }
-
-    const addReview = (review) => {
-        addDoc(reviewRef, {
-            review: {
-                'title': review.title,
-                'body': review.body,
-                'rating': review.rating
-            }
-        })
-        setModalOpen(false);
-    }
-
-    function dismissKeyboard() {
-        if (Platform.OS != "web") {
-            Keyboard.dismiss();
-        }
+    
+    const reviewHandler = () => {
+        let id = route.params.id;
+        navigation.navigate('Reviews', id);
     }
 
     return (
-        <View style={[globalStyles.container, {flex: 1}]}>
-
-            <Modal visible={modalOpen} animationType='slide'>
-                <TouchableWithoutFeedback
-                onPress={() => dismissKeyboard()}>
-                    <View style={globalStyles.container}>
-                        <MaterialIcons 
-                        name='close'
-                        size={24}
-                        style={{...styles.modalToggle, ...styles.modalClose}}
-                        onPress={() => setModalOpen(false)}
-                        />
-                        <ReviewForm 
-                            addReview={addReview} />
-                    </View>
-                </TouchableWithoutFeedback>
-            </Modal>
-
-            <View>
-                <View style={styles.backButton}>
-                    <Ionicons name="chevron-back" size={22} 
-                    color="#007AFF" 
-                    onPress={() => pressHandler()}/>
-                    <Button 
-                        title={'Back'}    
-                        onPress={() => pressHandler()}
-                    />
-                </View>
-
+        <View style={globalStyles.container}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <BackButton navigation={navigation} />
                 <View>
                     <Text style={globalStyles.titleText}>{route.params.title}</Text>
                     <Ionicons 
@@ -201,27 +142,13 @@ const ProductDetails = ({ route, navigation }) => {
                     <Text style={styles.sectionTitle}>Beschreibung</Text>
                     <Text style={styles.description}>{route.params.description}</Text>
                 </View>
-            </View>
 
-            <View style={{marginTop: 10}}>
-                <Text style={styles.sectionTitle}>Bewertungen</Text>
-                <FlatList 
-                    data={reviews}
-                    renderItem={({ item }) => {
-                        return (
-                        <View>
-                            <ReviewCard style={globalStyles.itemCard}>
-                                <Text>{item.title}</Text>
-                                <Text>{item.body}</Text>
-                                <Image source={(images.ratings[item.rating])} />
-                            </ReviewCard>
-                        </View>
-                        )}}
-                        keyExtractor={(item) => item.id}
-                />
-                <Button title={'Bewertung hinzufügen...'} onPress={() => setModalOpen(true)} />
-            </View>
-          
+                <TouchableOpacity onPress={() => reviewHandler()}>
+                    <View style={styles.button}>
+                        <Text style={styles.buttonText}>Bewertungen</Text>
+                    </View>
+                </TouchableOpacity>
+            </ScrollView>
         </View>
       );
     }
@@ -240,11 +167,19 @@ const styles = StyleSheet.create({
         marginTop: 10,
         fontSize: 20,
     },
-    backButton: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        alignSelf: 'flex-start',
-        marginBottom: 10,
+    button: {
+        backgroundColor: '#2997FF',
+        width: 200,
+        borderRadius: 10,
+        padding: 10,
+        margin: 20,
+        alignSelf: 'center',
+    },
+    buttonText: {
+        fontSize: 20,
+        fontFamily: 'nunito-bold',
+        alignSelf: 'center',
+        color: '#fff'
     },
     section: {
         paddingTop: 18,
@@ -256,18 +191,6 @@ const styles = StyleSheet.create({
     description: {
         fontFamily: 'nunito-regular',
         marginTop: 2,
-    },
-    modalToggle: {
-        marginBottom: 10,
-        borderWidth: 4,
-        borderColor: '#3395ff',
-        padding: 10,
-        borderRadius: 10,
-        alignSelf: 'center',
-    },
-    modalClose: {
-        marginTop: 50,
-        marginBottom: 10,
     },
 })
  

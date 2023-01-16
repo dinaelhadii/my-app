@@ -6,14 +6,14 @@ export const globalStyles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: '#fff',
         justifyContent: 'flex-start',
-        paddingRight: 15,
-        paddingLeft: 15,
+        paddingRight: 10,
+        paddingLeft: 10,
     },
     titleText: {
         fontFamily: 'nunito-bold',
         fontSize: 22,
-        paddingTop: 10,
-        paddingBottom: 10
+        marginTop: 10,
+        marginBottom: 10
     },
     productTitle: {
         fontFamily: 'nunito-bold',
@@ -36,14 +36,15 @@ export const globalStyles = StyleSheet.create({
         margin: 20,
         backgroundColor: '#b3d7ff',
     },
-})
-
-export const images = StyleSheet.create({
-    ratings: {
-        '1': require('../assets/rating-1.png'),
-        '2': require('../assets/rating-2.png'),
-        '3': require('../assets/rating-3.png'),
-        '4': require('../assets/rating-4.png'),
-        '5': require('../assets/rating-5.png'),
-    }
+    backButton: {
+        backgroundColor: '#2997FF',
+        width: 100,
+        borderRadius: 10,
+        padding: 10,
+        marginTop: 10,
+        flexDirection: 'row', 
+        justifyContent: 'flex-start', 
+        alignSelf: 'flex-start', 
+        alignItems: 'center'
+    },
 })

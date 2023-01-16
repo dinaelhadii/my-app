@@ -24,7 +24,6 @@ const Cart = () => {
 
     return ( 
         <View style={globalStyles.container}>
-            <Text style={globalStyles.text}>Warenkorbinhalt</Text>
             <FlatList 
             style={styles.list}
             data={shopCart}
