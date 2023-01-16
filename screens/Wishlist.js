@@ -5,13 +5,11 @@ import { StyleSheet, Vibration } from 'react-native';
 
 // import from firebase and firebase-related files
 import { db, auth } from '../firebase';
-import { onSnapshot, getDoc, updateDoc, doc, arrayRemove, arrayUnion } from 'firebase/firestore';
+import { onSnapshot, updateDoc, doc } from 'firebase/firestore';
 
-// import styles and components
+// import styles, icons and components
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
-
-// import icons
 import { MaterialIcons } from '@expo/vector-icons';
 
 const Wishlist = ({ route }) => {

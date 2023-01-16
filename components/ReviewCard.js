@@ -1,3 +1,6 @@
+// Ähnlich der Card-Komponente aber mit anderem Design.
+
+// import from react-native
 import { StyleSheet, View } from "react-native";
 
 const ReviewCard = (props) => {

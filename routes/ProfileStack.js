@@ -1,5 +1,7 @@
+// import from react-navigation
 import { createStackNavigator } from "@react-navigation/stack";
 
+// import screen-components
 import Profile from "../screens/Profile";
 import Impressum from "../screens/Impressum";
 

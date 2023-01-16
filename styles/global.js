@@ -11,9 +11,16 @@ export const globalStyles = StyleSheet.create({
     },
     titleText: {
         fontFamily: 'nunito-bold',
-        fontSize: 22,
+        fontSize: 30,
         marginTop: 10,
-        marginBottom: 10
+        marginBottom: 10,
+        alignSelf: 'center'
+    },
+    sectionText: {
+        fontFamily: 'nunito-bold',
+        fontSize: 26,
+        marginTop: 10,
+        marginBottom: 10,
     },
     productTitle: {
         fontFamily: 'nunito-bold',
@@ -45,6 +52,6 @@ export const globalStyles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'flex-start', 
         alignSelf: 'flex-start', 
-        alignItems: 'center'
+        alignItems: 'center',
     },
 })

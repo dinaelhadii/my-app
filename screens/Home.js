@@ -1,8 +1,10 @@
+// Das Home-Menü, welche die verfügbaren Produkte anzeigt, welcher in der Firestore-Datenbank hinterlegt sind.
+
 // import from react and react-native
 import { useState, useEffect } from 'react';
 import { FlatList, View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
-// import from firebase and firebase-related files
+// import from firebase and firebase-related file
 import { products, colRef, auth, db } from '../firebase';
 import { onSnapshot, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
@@ -16,6 +18,7 @@ const Home = ({ navigation }) => {
 
   const [name, setName] = useState('')
 
+  // Beim ersten Rendern der Bildschirmseite werden die Produkte und der Nutzername vorher geladen.
   useEffect(() => {
     const fetchData = async () => {
       const data = await getDocs(colRef)
@@ -30,6 +33,8 @@ const Home = ({ navigation }) => {
       })
   }, []);
 
+  // Jedes Produkt wird in einer Card-Komponente dargestellt. Beim Anklicken navigiert die App
+  // zu einer neuen Seite, welche die Produktdetails enthält.
     return (
       <View style={globalStyles.container}>
           <Text style={globalStyles.titleText}>Willkommen {name}!</Text>

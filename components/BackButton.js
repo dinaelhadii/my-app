@@ -1,4 +1,7 @@
-// import from react-native-modules
+// Wiederverwendbarer Button mit bestimmten Design. Beim Anklicken wird die aktuelle Bildschirmseite 
+// des Stacks weg-"gepoppt" und zur vorherigen Bildschirmseite zurück navigiert.
+
+// import from react-native
 import { View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 // import icons

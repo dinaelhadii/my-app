@@ -65,7 +65,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      {isLoggedIn && appIsReady  ? (
+      {isLoggedIn ? (
         <NavBar />
       ) : (
         <LoginStack />

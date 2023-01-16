@@ -1,9 +1,14 @@
+// import from react-native
 import { StyleSheet, View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 
-import { globalStyles } from '../styles/global';
-import Card from '../components/Card';
+// import from firebase and firebase-related file
 import { auth } from '../firebase';
 import { signOut } from "firebase/auth";
+
+// import styles and components
+import { globalStyles } from '../styles/global';
+import Card from '../components/Card';
+
 
 const Profile = ({ navigation }) => {
 
@@ -36,7 +41,7 @@ const Profile = ({ navigation }) => {
                         if (item.key === '5') {
                         handleSignOut()}}}>
                         <Card style={globalStyles.itemCard}>
-                            <Text>{item.title}</Text>
+                            <Text style={globalStyles.text}>{item.title}</Text>
                         </Card> 
                     </TouchableOpacity>
                     </View>
@@ -47,7 +52,7 @@ const Profile = ({ navigation }) => {
             <View style={globalStyles.impressum}>
                 <TouchableOpacity onPress={() => navigation.navigate('Impressum')}>
                 <Card>
-                    <Text style={{textAlign: 'center'}}>IMPRESSUM</Text>
+                    <Text style={[{textAlign: 'center'}, globalStyles.text]}>IMPRESSUM</Text>
                 </Card>
                 </TouchableOpacity>
             </View>

@@ -1,4 +1,7 @@
+// import from react-native
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
+
+// import styles
 import { globalStyles } from '../styles/global';
 
 const Impressum = ({ route }) => {

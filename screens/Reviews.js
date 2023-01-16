@@ -1,11 +1,10 @@
 // import from react and react-native
 import { useState, useEffect } from 'react';
-import { 
-    View, StyleSheet, Text, Image, 
-    Button, FlatList, Modal, TouchableWithoutFeedback, Keyboard, Platform
-} from 'react-native';
+import { View, StyleSheet, Text, Image, FlatList, Modal, 
+    TouchableWithoutFeedback, Keyboard, Platform } from 'react-native';
 
-// import icons
+// import styles and icons
+import { globalStyles } from '../styles/global';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -13,12 +12,11 @@ import { AntDesign } from '@expo/vector-icons';
 import { addDoc, onSnapshot, collection } from 'firebase/firestore';
 import { db } from '../firebase';
 
-// import styles and components
-import { globalStyles, images } from '../styles/global';
+// import components
 import ReviewCard from '../components/ReviewCard';
 import ReviewForm from '../screens/ReviewForm';
 import BackButton from '../components/BackButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import AppButton from '../components/AppButton';
 
 const Reviews = ({ route, navigation }) => {
 
@@ -97,7 +95,7 @@ const Reviews = ({ route, navigation }) => {
                         )}}
                         keyExtractor={(item) => item.id}
                 />
-                <Button title={'Bewertung hinzufügen...'} onPress={() => setModalOpen(true)} />
+                <AppButton title={'Bewertung hinzufügen'} pressHandler={() => setModalOpen(true)} />
             </View>
         </View>
      );

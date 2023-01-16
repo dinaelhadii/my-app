@@ -1,3 +1,4 @@
+// import from react-native
 import { StyleSheet, View } from "react-native";
 
 const Card = (props) => {

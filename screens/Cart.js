@@ -1,10 +1,12 @@
+// import from react and react-native
 import { useState, useEffect } from 'react';
-import { View, Text, Image, FlatList } from 'react-native';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { colRef, db, auth } from '../firebase';
-import { onSnapshot, userDoc, doc } from 'firebase/firestore';
+// import from firebase and firebase-related file
+import { db, auth } from '../firebase';
+import { onSnapshot, doc } from 'firebase/firestore';
 
+// import styles and components
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
 import CheckoutButton from '../components/CheckoutButton';

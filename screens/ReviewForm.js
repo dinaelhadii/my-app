@@ -1,7 +1,12 @@
+// import from react-native
 import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity } from "react-native";
-import { globalStyles } from "../styles/global";
+
+// import input-validation-libraries
 import { Formik } from 'formik';
 import * as yup from 'yup';
+
+// import styles
+import { globalStyles } from "../styles/global";
 
 const ReviewSchema = yup.object({
     title: yup.string()

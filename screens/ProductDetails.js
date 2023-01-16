@@ -1,21 +1,20 @@
 // import from react and react-native
 import { useState, useEffect } from 'react';
-import { 
-    View, ScrollView, SafeAreaView, StyleSheet, Text, Image, 
-    Button, FlatList, Modal, TouchableOpacity, Keyboard, Vibration, Platform, SectionList
-} from 'react-native';
+import { View, ScrollView, SafeAreaView, StyleSheet, Text, Image, 
+    Button, Modal, TouchableOpacity, Keyboard, Vibration } from 'react-native';
 
-// import icons
+// import styles and icons
+import { globalStyles } from '../styles/global';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-// import from firebase and firebase-related files
+// import from firebase and firebase-related file
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 
-// import styles and components
-import { globalStyles } from '../styles/global';
+// import components
 import BackButton from '../components/BackButton';
+import AppButton from '../components/AppButton';
 
 const ProductDetails = ({ route, navigation }) => {
 
@@ -116,17 +115,10 @@ const ProductDetails = ({ route, navigation }) => {
 
     return (
         <View style={globalStyles.container}>
+            <BackButton navigation={navigation} />
             <ScrollView showsVerticalScrollIndicator={false}>
-                <BackButton navigation={navigation} />
                 <View>
                     <Text style={globalStyles.titleText}>{route.params.title}</Text>
-                    <Ionicons 
-                        name={isLiked ? "heart" : 'heart-outline'} size={24} 
-                        color="black" onPress={() => addLikedItem()} />
-                    <MaterialIcons 
-                        name={isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={24} 
-                        color="black"
-                        onPress={() => toggleCart()} />
                     <Image 
                         source={{uri: route.params.image}}
                         style={{
@@ -138,16 +130,22 @@ const ProductDetails = ({ route, navigation }) => {
                     <Text style={styles.price}>{route.params.price}</Text>
                 </View>
 
+                <View style={{marginTop: 10, flexDirection: 'row', alignSelf: 'center'}}>
+                    <Ionicons 
+                        name={isLiked ? "heart" : 'heart-outline'} size={28} 
+                        color="black" onPress={() => addLikedItem()} />
+                    <MaterialIcons 
+                        name={isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={28} 
+                        color="black"
+                        onPress={() => toggleCart()} />
+                </View>
+
                 <View style={styles.section}>
                     <Text style={styles.sectionTitle}>Beschreibung</Text>
                     <Text style={styles.description}>{route.params.description}</Text>
                 </View>
 
-                <TouchableOpacity onPress={() => reviewHandler()}>
-                    <View style={styles.button}>
-                        <Text style={styles.buttonText}>Bewertungen</Text>
-                    </View>
-                </TouchableOpacity>
+                <AppButton title={'Bewertungen'} pressHandler={() => reviewHandler()} />
             </ScrollView>
         </View>
       );

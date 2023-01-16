@@ -1,10 +1,16 @@
-import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, TouchableWithoutFeedback, Text, Platform } from "react-native";
+
+// import from react and react-native
 import { useState, useEffect } from "react";
+import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, 
+    TouchableWithoutFeedback, Text, Platform, Vibration } from "react-native";
+
+// import from firebase and firebase-related file
 import { auth, db } from "../firebase";
 import { addDoc, setDoc, onSnapshot, collection, doc, getDoc, query } from "firebase/firestore";
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+
+// import icons
 import { FontAwesome } from '@expo/vector-icons';
-import { Vibration } from "react-native";
 
 const Register = ({ navigation }) => {
 

@@ -1,5 +1,7 @@
+// import from react-navigation
 import { createStackNavigator } from "@react-navigation/stack";
 
+// import screen-components
 import Home from '../screens/Home';
 import ProductDetails from '../screens/ProductDetails';
 import Reviews from "../screens/Reviews";
