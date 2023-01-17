@@ -25,7 +25,8 @@ export default function App() {
         // Pre-load fonts, make any API calls you need to do here
         await Font.loadAsync({
           'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
-          'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf')
+          'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
+          'pacifico-regular': require('./assets/fonts/Pacifico-Regular.ttf')
         });
       } catch (e) {
         console.warn(e);

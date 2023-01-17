@@ -2,16 +2,27 @@
 // und es erscheint eine Meldung auf dem Bildschirm. 
 
 // import from react and react-native
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Vibration, StyleSheet, Alert } from 'react-native';
 
 
-const CheckoutButton = () => {
+const CheckoutButton = ({ isEmpty }) => {
 
     const checkoutHandler = () => {
-        Vibration.vibrate();
-        Alert.alert('Vielen Dank für deinen Einkauf!', 'Eine Bestätigungsmail wurde soeben an dich geschickt.');
+        if (isEmpty === false) {
+            Vibration.vibrate();
+            if (Platform.OS === 'web') {
+                alert('Vielen Dank für deinen Einkauf! Eine Bestätigungsmail wurde soeben an dich geschickt.');
+            } else {
+                Alert.alert('Vielen Dank für deinen Einkauf!', 'Eine Bestätigungsmail wurde soeben an dich geschickt.');
+                console.log(isEmpty);
+            }
+        } else {
+            if (Platform.OS === 'web') {
+                alert('Der Warenkorb ist leer.');
+        }
     }
+}
 
     return ( 
         <TouchableOpacity onPress={() => checkoutHandler()}>

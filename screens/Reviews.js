@@ -61,11 +61,11 @@ const Reviews = ({ route, navigation }) => {
             <Modal visible={modalOpen} animationType='slide'>
                 <TouchableWithoutFeedback
                 onPress={() => dismissKeyboard()}>
-                    <View style={globalStyles.container}>
+                    <View style={[globalStyles.container]}>
                         <MaterialIcons 
                         name='close'
                         size={24}
-                        style={{...styles.modalToggle, ...styles.modalClose}}
+                        style={styles.modalToggle}
                         onPress={() => setModalOpen(false)}
                         />
                         <ReviewForm 
@@ -80,15 +80,13 @@ const Reviews = ({ route, navigation }) => {
                 <FlatList 
                     data={reviews}
                     renderItem={({ item }) => {
-                        let rating = item.rating;
-                        console.log(rating);
                         return (
                         <View>
                             <ReviewCard style={globalStyles.itemCard}>
                                 <Text style={styles.title}>{item.title}</Text>
                                 <Text style={styles.body}>{item.body}</Text>
                                 <View style={styles.rating}>
-                                    {Array(rating).fill(<AntDesign name="star" size={24} color="black" />)}
+                                    {Array.from({length: item.rating}, () => (<AntDesign name="star" size={24} color="black" />))}
                                 </View>
                             </ReviewCard>
                         </View>
@@ -124,15 +122,12 @@ const styles = StyleSheet.create({
     },
     modalToggle: {
         marginBottom: 10,
+        marginTop: 50,
         borderWidth: 4,
         borderColor: '#3395ff',
         padding: 10,
         borderRadius: 10,
         alignSelf: 'center',
-    },
-    modalClose: {
-        marginTop: 50,
-        marginBottom: 10,
     },
 })
 

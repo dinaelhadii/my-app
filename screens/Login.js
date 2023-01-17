@@ -1,7 +1,7 @@
 // import from react and react-native
 import { useState, useEffect } from "react";
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, 
-    TouchableOpacity, TouchableWithoutFeedback, Text, Platform, Vibration } from "react-native";
+    TouchableOpacity, TouchableWithoutFeedback, Text, Platform, Vibration, Alert } from "react-native";
 
 // import from firebase and firebase-related file
 import { auth, db } from "../firebase";
@@ -10,6 +10,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 
 // import icons
 import { FontAwesome } from '@expo/vector-icons';
+import AppButton from "../components/AppButton";
 
 const Login = ({ navigation }) => {
 
@@ -23,7 +24,29 @@ const Login = ({ navigation }) => {
                 console.log('Logged in with: ', user.email);
                 Vibration.vibrate([400]);
             })
-            .catch(error => alert(error.message));
+            .catch(error => {
+                console.log(error.code);
+                switch(error.code) {
+                    case 'auth/wrong-password':
+                        if (Platform.OS === 'web') {
+                            alert('Falsches Passwort')
+                        } else {
+                            Alert.alert('Falsches Passwort'); }
+                        break;
+                    case 'auth/internal-error':
+                        if (Platform.OS === 'web') {
+                            alert('Bitte stellen Sie sicher, dass E-Mail und Passwort eingegeben sind.')
+                        } else {
+                            Alert.alert('Fehler', 'Bitte stellen Sie sicher, dass E-Mail und Passwort eingegeben sind.') }
+                            break;
+                    case 'auth/invalid-email':
+                        if (Platform.OS === 'web') {
+                            alert('Ungültige E-Mail')
+                        } else {
+                            Alert.alert('Ungültige E-Mail'); }
+                        break;
+                }
+            });
     }
 
     function dismissKeyboard() {
@@ -38,6 +61,7 @@ const Login = ({ navigation }) => {
             behavior='padding'>
                 <View style={styles.appLogo}>
                 <FontAwesome name="shopping-bag" size={80} color="black" />
+                <Text style={styles.appText}>ShoppingSky</Text>
                 </View>
             <View style={styles.inputContainer}>
                     <TextInput 
@@ -84,6 +108,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    appText: {
+        fontFamily: 'pacifico-regular',
+        fontSize: 60
+    },
     inputContainer: {
         width: '80%',
     },
@@ -110,7 +138,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontWeight: '700',
-        fontSize: 16,
+        fontSize: 18,
     },
     buttonOutLine: {
         backgroundColor: '#fff',
@@ -121,7 +149,7 @@ const styles = StyleSheet.create({
     buttonOutlineText: {
         color: '#0782F9',
         fontWeight: '700',
-        fontSize: 16,
+        fontSize: 18,
     }
 })
  

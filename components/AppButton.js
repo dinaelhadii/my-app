@@ -22,11 +22,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#2997FF',
         borderRadius: 10,
         padding: 10,
-        margin: 20,
+        margin: 30,
         alignSelf: 'center',
     },
     buttonText: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: 'nunito-bold',
         alignSelf: 'center',
         color: '#fff',

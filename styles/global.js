@@ -30,18 +30,24 @@ export const globalStyles = StyleSheet.create({
         fontFamily: 'nunito-regular',
         fontSize: 14
     },
+    errorText: {
+        alignSelf: 'center',
+        fontFamily: 'nunito-regular'
+    },
       impressum: {
         flex: 1,
         justifyContent: 'flex-end'
     },
     input: {
         borderWidth: 3,
+        fontFamily: 'nunito-regular',
         borderColor: 'black',
         padding: 10,
         fontSize: 18,
         borderRadius: 8,
         margin: 20,
-        backgroundColor: '#b3d7ff',
+        marginBottom: 10,
+        backgroundColor: 'skyblue',
     },
     backButton: {
         backgroundColor: '#2997FF',

@@ -2,7 +2,7 @@
 // import from react and react-native
 import { useState, useEffect } from "react";
 import { View, KeyboardAvoidingView, TextInput, StyleSheet, Keyboard, TouchableOpacity, 
-    TouchableWithoutFeedback, Text, Platform, Vibration } from "react-native";
+    TouchableWithoutFeedback, Text, Platform, Vibration, Alert } from "react-native";
 
 // import from firebase and firebase-related file
 import { auth, db } from "../firebase";
@@ -34,7 +34,33 @@ const Register = ({ navigation }) => {
                 navigation.navigate('NavBar');
                 Vibration.vibrate([400]);
             })
-            .catch(error => alert(error.message))
+            .catch(error => {
+                console.log(error.message);
+                switch(error.code) {
+                    case 'auth/invalid-email':
+                        if (Platform.OS === 'web') {
+                            alert('Ungültige E-Mail.')
+                        } else {
+                            Alert.alert('Ungültige E-Mail.'); }
+                        break;
+                    case 'auth/email-already-in-use':
+                        if (Platform.OS === 'web') {
+                            alert('E-Mail vergeben.')
+                        } else {
+                            Alert.alert('E-Mail vergeben.'); }
+                        break;
+                    case 'auth/weak-password':
+                        if (Platform.OS === 'web') {
+                            alert('Bitte wählen Sie ein starkes Passwort.')
+                        } else {
+                            Alert.alert('Bitte wählen Sie ein starkes Passwort.') }
+                    case 'auth/internal-error':
+                        if (Platform.OS === 'web') {
+                            alert('Bitte stellen Sie sicher, dass E-Mail und Passwort eingegeben sind.')
+                        } else {
+                            Alert.alert('Fehler', 'Bitte stellen Sie sicher, dass E-Mail und Passwort eingegeben sind.') }
+                }
+            })
     }
 
     function dismissKeyboard() {

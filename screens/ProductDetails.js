@@ -1,5 +1,5 @@
 // import from react and react-native
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { View, ScrollView, SafeAreaView, StyleSheet, Text, Image, 
     Button, Modal, TouchableOpacity, Keyboard, Vibration } from 'react-native';
 
@@ -9,49 +9,58 @@ import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
 // import from firebase and firebase-related file
-import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 
 // import components
 import BackButton from '../components/BackButton';
 import AppButton from '../components/AppButton';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
 const ProductDetails = ({ route, navigation }) => {
 
+    // Referenz zum User-Dokument
     const userDoc = doc(db, 'users', auth.currentUser?.uid);
 
-    const [isLiked, setIsLiked] = useState(false);
+    //const [isLiked, setIsLiked] = useState(false);
     const [isCart, setIsCart] = useState(false);
+    const [isLiked, setIsLiked] = useState(false);
     const [isWishlistEmpty, setIsWishlistEmpty] = useState(true);
     const [isCartEmpty, setIsCartEmpty] = useState(true);
 
-
-    useEffect(() => {
-        const fetchIsLiked = async () => {
-            await getDoc(userDoc)
-            .then((snapshot) => {
-                snapshot.data().wishlist.forEach((product) => {
-                    if (product.title == route.params.title) {
-                        setIsLiked(true);
-                        setIsWishlistEmpty(false);
-                    }
+    useFocusEffect(
+        useCallback(() => {
+            const fetchIsLiked = async () => {
+                await getDoc(userDoc)
+                .then((snapshot) => {
+                    snapshot.data().wishlist.forEach((product) => {
+                        if (product.title == route.params.title) {
+                            console.log('is in wishlist')
+                            setIsLiked(true);
+                            setIsWishlistEmpty(false);
+                        } else {
+                            console.log('is not in wishlist');
+                            setIsLiked(false);
+                            setIsWishlistEmpty(true);
+                        }
+                    })
                 })
-            })
-        }
-        const fetchIsCart = async () => {
-            await getDoc(userDoc)
-            .then((snapshot) => {
-                snapshot.data().cart.forEach((product) => {
-                    if (product.title == route.params.title) {
-                        setIsCart(true);
-                        setIsCartEmpty(false);
-                    }
+            };
+            const fetchIsCart = async () => {
+                await getDoc(userDoc)
+                .then((snapshot) => {
+                    snapshot.data().cart.forEach((product) => {
+                        if (product.title == route.params.title) {
+                            setIsCart(true);
+                            setIsCartEmpty(false);
+                        }
+                    })
                 })
-            })
-        }
-        fetchIsLiked();
-        fetchIsCart();
-    }, [])
+            };
+            fetchIsLiked();
+            fetchIsCart();
+        }, [])
+    );
 
     useEffect(() => {
         let likedItem = {};
@@ -68,7 +77,6 @@ const ProductDetails = ({ route, navigation }) => {
                 wishlist: arrayUnion(likedItem)
             });
         } else if (isLiked == false && isWishlistEmpty == false) {
-            console.log('deleting item from wishlist');
             updateDoc(userDoc, {
                 wishlist: arrayRemove(likedItem)
             });
@@ -85,20 +93,17 @@ const ProductDetails = ({ route, navigation }) => {
             id: route.params.id,
         }
         if (isCart == true) {
-            console.log('adding to cart')
             updateDoc(userDoc, {
                 cart: arrayUnion(cartedItem)
             });
         } else if (isCart == false && isCartEmpty == false) {
-            console.log('deleting item from cart');
             updateDoc(userDoc, {
                 cart: arrayRemove(cartedItem)
             });
         }
     }, [isCart])
 
-    const addLikedItem = () => {
-        console.log('toggling like button')
+    const toggleWishlist = () => {
         Vibration.vibrate([400]);
         setIsLiked(!isLiked);
     }
@@ -133,7 +138,7 @@ const ProductDetails = ({ route, navigation }) => {
                 <View style={{marginTop: 10, flexDirection: 'row', alignSelf: 'center'}}>
                     <Ionicons 
                         name={isLiked ? "heart" : 'heart-outline'} size={28} 
-                        color="black" onPress={() => addLikedItem()} />
+                        color="black" onPress={() => toggleWishlist()} />
                     <MaterialIcons 
                         name={isCart ? "remove-shopping-cart" : "add-shopping-cart"} size={28} 
                         color="black"

@@ -14,7 +14,7 @@ const Profile = ({ navigation }) => {
 
     const handleSignOut = () => {
         signOut(auth).then(() => {
-                navigation.replace('Login')
+                navigation.navigate('HomeStack');
             })
             .catch(error => alert(error.message))
     }

@@ -9,14 +9,13 @@ import { products, colRef, auth, db } from '../firebase';
 import { onSnapshot, collection, getDocs, doc, getDoc } from 'firebase/firestore';
 
 // import styles and components
-import { globalStyles, images } from '../styles/global';
+import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
 
 const Home = ({ navigation }) => {
 
   const [productData, setProductData] = useState([]);
-
-  const [name, setName] = useState('')
+  const [name, setName] = useState('');
 
   // Beim ersten Rendern der Bildschirmseite werden die Produkte und der Nutzername vorher geladen.
   useEffect(() => {
@@ -37,7 +36,7 @@ const Home = ({ navigation }) => {
   // zu einer neuen Seite, welche die Produktdetails enthält.
     return (
       <View style={globalStyles.container}>
-          <Text style={globalStyles.titleText}>Willkommen {name}!</Text>
+          <Text style={[globalStyles.titleText, {fontSize: 24}]}>Willkommen {name}!</Text>
           <FlatList
           data={productData}
           renderItem={({ item }) => {

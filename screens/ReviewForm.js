@@ -7,18 +7,17 @@ import * as yup from 'yup';
 
 // import styles
 import { globalStyles } from "../styles/global";
+import AppButton from "../components/AppButton";
 
 const ReviewSchema = yup.object({
     title: yup.string()
         .required()
         .min(4)
         .max(15),
-    body: yup.string()
-        .required()
-        .min(5),
+    body: yup.string(),
     rating: yup.string()
         .required()
-        .test('is-num-1-5', 'Rating must be a number 1-5.', (val) => {
+        .test('is-num-1-5', 'Bitte eine Zahl zwischen 1-5 eingeben.', (val) => {
             return parseInt(val) < 6 && parseInt(val) > 0;
         })
 })
@@ -39,7 +38,7 @@ const ReviewForm = ({ addReview }) => {
                     <View>
                         <TextInput 
                             style={globalStyles.input}
-                            placeholder='Review Title'
+                            placeholder='Titel'
                             placeholderTextColor='#7D7D7D'
                             onChangeText={props.handleChange('title')}
                             value={props.values.title}
@@ -48,9 +47,9 @@ const ReviewForm = ({ addReview }) => {
                         <Text style={globalStyles.errorText}>{ props.touched.title && props.errors.title }</Text>
                         <TextInput 
                             multiline
-                            minHeight={60}
+                            minHeight={80}
                             style={globalStyles.input}
-                            placeholder='Review Body'   
+                            placeholder='Text'   
                             placeholderTextColor='#7D7D7D'
                             onChangeText={props.handleChange('body')}
                             value={props.values.body}
@@ -59,7 +58,7 @@ const ReviewForm = ({ addReview }) => {
                         <Text style={globalStyles.errorText}>{ props.touched.body && props.errors.body }</Text>
                         <TextInput 
                             style={globalStyles.input}
-                            placeholder='Rating (1-5)'   
+                            placeholder='Bewertung (1-5)'   
                             placeholderTextColor='#7D7D7D'
                             onChangeText={props.handleChange('rating')}
                             value={props.values.rating}
@@ -67,11 +66,8 @@ const ReviewForm = ({ addReview }) => {
                             onBlur={props.handleBlur('rating')}
                         />
                         <Text style={globalStyles.errorText}>{ props.touched.rating && props.errors.rating }</Text>
-                        <TouchableOpacity style={{alignSelf: 'center'}} onPress={props.handleSubmit}>
-                            <View style={styles.button}>
-                                <Text style={styles.buttonText}>Bewertung hinzufügen</Text>
-                            </View>
-                        </TouchableOpacity>
+                        
+                        <AppButton title={'Bewertung hinzufügen'} pressHandler={props.handleSubmit} />
                     </View>
                 )}
             </Formik>
@@ -79,21 +75,4 @@ const ReviewForm = ({ addReview }) => {
      );
 }
 
-const styles = StyleSheet.create({
-    button: {
-        width: 250, 
-        height: 50,
-        borderRadius: 10,
-        alignItems: 'center',
-        backgroundColor: '#3395ff',
-        justifyContent: 'center',
-        marginTop: 30
-    },
-    buttonText: {
-        fontFamily: 'nunito-bold',
-        fontSize: 18,
-        color: 'white'
-    }
-})
- 
 export default ReviewForm;
