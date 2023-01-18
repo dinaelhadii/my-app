@@ -9,9 +9,9 @@ import { signOut } from "firebase/auth";
 import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
 
-
 const Profile = ({ navigation }) => {
 
+    // Ausloggen durch Klicken auf die Card-Komponente 'Log Out' mittels Firebase-Authentifikationsservice.
     const handleSignOut = () => {
         signOut(auth).then(() => {
                 navigation.navigate('HomeStack');
@@ -19,6 +19,7 @@ const Profile = ({ navigation }) => {
             .catch(error => alert(error.message))
     }
 
+    // Inhalt der Card-Komponenten
     const profileOps = [
         {title: 'Meine Bestellungen', key: '1'},
         {title: 'Abonnements', key: '2'},
@@ -34,7 +35,6 @@ const Profile = ({ navigation }) => {
                 <FlatList
                 data={profileOps}
                 renderItem={({ item }) => {
-        
                 return (
                     <View>
                     <TouchableOpacity onPress={() => {

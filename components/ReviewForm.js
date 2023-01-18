@@ -1,3 +1,6 @@
+// Bewertungsformular, welches die Bibliotheken yup und Formik zur Validierung der Nutzereingaben 
+// und Darstellung von Fehlermeldungen verwendet. 
+
 // import from react-native
 import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity } from "react-native";
 
@@ -5,10 +8,12 @@ import { StyleSheet, View, Text, Button, TextInput, TouchableOpacity } from "rea
 import { Formik } from 'formik';
 import * as yup from 'yup';
 
-// import styles
+// import styles and components
 import { globalStyles } from "../styles/global";
-import AppButton from "../components/AppButton";
+import AppButton from "./AppButton";
 
+// Definiert für jede TextInput-Komponente Bedingungen, die eingehalten werden müssen,
+// um die Daten einreichen zu können.
 const ReviewSchema = yup.object({
     title: yup.string()
         .required()
@@ -23,7 +28,9 @@ const ReviewSchema = yup.object({
 })
 
 const ReviewForm = ({ addReview }) => {
-
+    // Formik nimmt die Namen der TextInput-Komponenten auf und nimmt als Validierungsschema
+    // die mit yup definierte Validierung auf. Beim Einreichen der Daten (submit) werden die Inhalte
+    // der Felder geleert und es wird die addReview-Funktion aufgerufen (siehe Reviews-Komponente).
     return ( 
         <View>
             <Formik

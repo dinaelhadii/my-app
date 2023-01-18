@@ -1,7 +1,10 @@
+// Hier werden die Produkte, welche der Nutzer zum Warenkorb hinzugefügt hat
+// in einer FlatList angezeigt.
+
 // import from react and react-native
 import { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
-import { StyleSheet, Vibration } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 // import from firebase and firebase-related files
 import { db, auth } from '../firebase';
@@ -12,11 +15,12 @@ import { globalStyles } from '../styles/global';
 import Card from '../components/Card';
 import { Ionicons } from '@expo/vector-icons';
 
-const Wishlist = ({ route }) => {
+const Wishlist = () => {
 
     const userDoc = doc(db, 'users', auth.currentUser?.uid);
     const [wishlist, setWishlist] = useState([]);
 
+    // Bei jeder Änderung der Wunschliste durch den Nutzer werden die Daten in Firestore aktualisiert.
     useEffect(() => {
         let unsubscribe = onSnapshot(userDoc, (snapshot) => {
             setWishlist(snapshot.data().wishlist)
@@ -24,6 +28,7 @@ const Wishlist = ({ route }) => {
         return () => unsubscribe();
     }, [])
 
+    // Siehe Cart.js.
     const removeItem = (item) => {
         updateDoc(userDoc, {
             wishlist: arrayRemove(item)

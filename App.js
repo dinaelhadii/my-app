@@ -1,3 +1,4 @@
+// import from react and react-native
 import { useState, useEffect, useCallback } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
@@ -12,17 +13,20 @@ import { auth } from './firebase';
 import NavBar from './routes/NavBar';
 import LoginStack from './routes/LoginStack';
 
+// Zeigt den Splashscreen an. Bild ist unter 'splash.png' im Ordner 'assets' gespeichert.
+// Funktion verhindert das Laden der App bzw. sorgt dafür, dass der Splashscreen nicht 'versteckt' wird.
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
 
+  // State-Variablen, die prüfen, ob App geladen ist und ob Nutzer eingeloggt ist.
   const [appIsReady, setAppIsReady] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
-        // Pre-load fonts, make any API calls you need to do here
+        // App lädt vor dem Laden der App Schriftarten herunter.
         await Font.loadAsync({
           'nunito-regular': require('./assets/fonts/Nunito-Regular.ttf'),
           'nunito-bold': require('./assets/fonts/Nunito-Bold.ttf'),
@@ -31,7 +35,7 @@ export default function App() {
       } catch (e) {
         console.warn(e);
       } finally {
-        // Tell the application to render
+        // App wird geladen, wenn Nutzer eingeloggt ist.
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           if (user) {
             setIsLoggedIn(true);
@@ -72,6 +76,6 @@ export default function App() {
         <LoginStack />
       )}
       <StatusBar></StatusBar>
-  </NavigationContainer>
+    </NavigationContainer>
   );
 }

@@ -1,3 +1,6 @@
+// Eine Card-Komponente, welche das Design verbessern soll. Dient dazu einzelne
+// Elemente einer Liste in einer einzelnen 'Karte' einheitlich darzustellen
+
 // import from react-native
 import { StyleSheet, View } from "react-native";
 

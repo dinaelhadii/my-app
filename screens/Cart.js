@@ -1,3 +1,5 @@
+// Warenkorb-Bildschirmseite.
+
 // import from react and react-native
 import { useState, useEffect } from 'react';
 import { View, Text, Image, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
@@ -18,6 +20,8 @@ const Cart = () => {
     const [shopCart, setShopCart] = useState([]);
     const [isEmpty, setIsEmpty] = useState(false);
     
+    // Hier wird auf Firestore zugegriffen. Es werden die Produkte, die dem Warenkorb hinzugefügt wurden
+    // in einem Array 'shopCart' (State-Variable) gespeichert.
     useEffect(() => {
         let unsubscribe = onSnapshot(userDoc, (snapshot) => {
             setShopCart(snapshot.data().cart)
@@ -25,6 +29,8 @@ const Cart = () => {
         return () => unsubscribe();
     }, [])
 
+    // Wenn sich der Inhalt von shopCart ändert, wird geprüft, ob der Warenkorb leer ist und
+    // die Information wird in der State-Variable 'isEmpty' gespeichert.
     useEffect(() => {
         if (shopCart.length !== 0) {
             setIsEmpty(false);
@@ -33,6 +39,8 @@ const Cart = () => {
         };
     }, [shopCart])
 
+    // Wenn das Warenkorb-Icon gedrückt wird, wird das Produkt von Firestore gelöscht. 
+    // Ebenso wird gespeichert, ob der Warenkorb jetzt leer ist.
     const removeItem = (item) => {
         updateDoc(userDoc, {
             cart: arrayRemove(item)
@@ -44,6 +52,8 @@ const Cart = () => {
         };
     }
 
+    // Jedes Produkt im Warenkorb wird in einer Card-Komponente dargestellt.
+    // Checkout-Button: Der Komponente wird die State-Variable isEmpty übergeben. Siehe CheckoutButton.js.
     return ( 
         <View style={globalStyles.container}>
             <FlatList 

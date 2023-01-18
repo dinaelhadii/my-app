@@ -9,13 +9,14 @@ import { Vibration, StyleSheet, Alert } from 'react-native';
 const CheckoutButton = ({ isEmpty }) => {
 
     const checkoutHandler = () => {
+        // Wenn Warenkorb voll ist, erscheint die Meldung. Wenn er leer ist, passiert beim Anklicken
+        // des Buttons nichts (in der mobilen App). 
         if (isEmpty === false) {
             Vibration.vibrate();
             if (Platform.OS === 'web') {
                 alert('Vielen Dank für deinen Einkauf! Eine Bestätigungsmail wurde soeben an dich geschickt.');
             } else {
                 Alert.alert('Vielen Dank für deinen Einkauf!', 'Eine Bestätigungsmail wurde soeben an dich geschickt.');
-                console.log(isEmpty);
             }
         } else {
             if (Platform.OS === 'web') {

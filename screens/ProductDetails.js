@@ -1,7 +1,6 @@
 // import from react and react-native
-import { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, SafeAreaView, StyleSheet, Text, Image, 
-    Button, Modal, TouchableOpacity, Keyboard, Vibration } from 'react-native';
+import { useState, useEffect, useCallback} from 'react';
+import { View, ScrollView, StyleSheet, Text, Image, Vibration } from 'react-native';
 
 // import styles and icons
 import { globalStyles } from '../styles/global';
@@ -15,19 +14,21 @@ import { db, auth } from '../firebase';
 // import components
 import BackButton from '../components/BackButton';
 import AppButton from '../components/AppButton';
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProductDetails = ({ route, navigation }) => {
 
     // Referenz zum User-Dokument
     const userDoc = doc(db, 'users', auth.currentUser?.uid);
 
-    //const [isLiked, setIsLiked] = useState(false);
     const [isCart, setIsCart] = useState(false);
     const [isLiked, setIsLiked] = useState(false);
     const [isWishlistEmpty, setIsWishlistEmpty] = useState(true);
     const [isCartEmpty, setIsCartEmpty] = useState(true);
 
+    // Jedes Mal, wenn der Bildschirm geöffnet wird, wird die Information geladen,
+    // ob das Produkt in der Wunschliste/dem Warenkorb ist und in isLiked gespeichert. Gleiches
+    // wird mit isEmpty geprüft.
     useFocusEffect(
         useCallback(() => {
             const fetchIsLiked = async () => {
@@ -35,11 +36,9 @@ const ProductDetails = ({ route, navigation }) => {
                 .then((snapshot) => {
                     snapshot.data().wishlist.forEach((product) => {
                         if (product.title == route.params.title) {
-                            console.log('is in wishlist')
                             setIsLiked(true);
                             setIsWishlistEmpty(false);
                         } else {
-                            console.log('is not in wishlist');
                             setIsLiked(false);
                             setIsWishlistEmpty(true);
                         }
@@ -62,6 +61,10 @@ const ProductDetails = ({ route, navigation }) => {
         }, [])
     );
 
+    // Wenn das Herz-Icon gedrückt wird, wird toggleWishlist getriggert. Dort wird isLiked
+    // geupdatet und der Vibrationsmotor ausgelöst. Wenn isLiked verändert wird, wird das
+    // Produkt in likedItem gespeichert und der Wunschliste in Firestore hinzugefügt oder von
+    // dieser gelöscht, abhängig von isLiked.
     useEffect(() => {
         let likedItem = {};
         likedItem = {
@@ -83,6 +86,7 @@ const ProductDetails = ({ route, navigation }) => {
         }
     }, [isLiked])
 
+    // Analog zu oben.
     useEffect(() => {
         let cartedItem = {};
         cartedItem = {
@@ -103,6 +107,7 @@ const ProductDetails = ({ route, navigation }) => {
         }
     }, [isCart])
 
+    // Toggeln des Like- oder Warenkorb-Buttons löst Vibrationsmotor aus.
     const toggleWishlist = () => {
         Vibration.vibrate([400]);
         setIsLiked(!isLiked);
@@ -113,6 +118,7 @@ const ProductDetails = ({ route, navigation }) => {
         setIsCart(!isCart);
     }
     
+    // Navigiert zu den Bewertungen, wenn der entsprechende Knopf gedrückt wird.
     const reviewHandler = () => {
         let id = route.params.id;
         navigation.navigate('Reviews', id);

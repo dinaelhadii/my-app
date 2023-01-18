@@ -4,11 +4,9 @@
 // import from react-native
 import { View, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-// import icons
-import { Ionicons } from '@expo/vector-icons';
-
-// import styles and components
+// import styles and icons
 import { globalStyles } from '../styles/global';
+import { Ionicons } from '@expo/vector-icons';
 
 const BackButton = ({ navigation }) => {
     return ( 

@@ -18,11 +18,16 @@ const Register = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    // Funktion vom Firebase-Authentifikationsservice. Beim Eingeben der Daten und bei Klick
+    // auf den Knopf, wird diese Funktion getriggert. Mittels usestate werden Name, Passwort und Email
+    // gespeichert und an die Firebase-Funktion übergeben. Es wird in Firestore ein User-Dokument
+    // in der users-collection erstellt. Jeder User hat einen eigenen Warenkorb und eine Wunschliste (Arrays,
+    // welche die Produkte als maps speichern.)
+    // Beim erfolgreichen SignUp wird zur NavBar navigiert und der Vibrationsmotor ausgelöst.
     const handleSignUp = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
-                console.log('Registered with', user.email);
                 setDoc(doc(db, 'users', user.uid), {
                     name: name,
                     email: email,
@@ -34,8 +39,8 @@ const Register = ({ navigation }) => {
                 navigation.navigate('NavBar');
                 Vibration.vibrate([400]);
             })
+            // Fehlermeldungen je nach Firebase error-code.
             .catch(error => {
-                console.log(error.message);
                 switch(error.code) {
                     case 'auth/invalid-email':
                         if (Platform.OS === 'web') {
@@ -63,6 +68,7 @@ const Register = ({ navigation }) => {
             })
     }
 
+    // siehe Login.js.
     function dismissKeyboard() {
         if (Platform.OS != "web") {
             Keyboard.dismiss();

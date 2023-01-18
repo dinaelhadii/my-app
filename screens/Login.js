@@ -17,15 +17,16 @@ const Login = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    // Authentifizierung erfolgt mit Firebase. 
     const handleLogin = () => {
+        // auth wurde in firebase.js definiert. Beim Login wird der Vibrationsmotor ausgelöst. 
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
-                console.log('Logged in with: ', user.email);
                 Vibration.vibrate([400]);
             })
+            // Falls Fehler auftreten, erscheinen Fehlermeldung abhängig vom Firebase error-code.
             .catch(error => {
-                console.log(error.code);
                 switch(error.code) {
                     case 'auth/wrong-password':
                         if (Platform.OS === 'web') {
@@ -45,10 +46,17 @@ const Login = ({ navigation }) => {
                         } else {
                             Alert.alert('Ungültige E-Mail'); }
                         break;
+                    case 'auth/user-not-found':
+                        if (Platform.OS === 'web') {
+                            alert('Nutzer nicht gefunden')
+                        } else {
+                            Alert.alert('Nutzer nicht gefunden')
+                        }
                 }
             });
     }
 
+    // Wenn diese Prüfung nicht erfolgt, ist die Eingabe von Text in Input-Feldern im Browser nicht möglich.
     function dismissKeyboard() {
         if (Platform.OS != "web") {
             Keyboard.dismiss();
@@ -56,6 +64,10 @@ const Login = ({ navigation }) => {
     }
 
     return ( 
+        // Wenn die Tastatur offen ist, kann diese weggeklickt werden, indem der Nutzer
+        // auf einem beliebigen Punkt auf dem Bildschirm drückt (Keyboard.dismiss).
+        // Die einzelnen TextInput-Komponenten speichern den eingegeben Inhalt und
+        // übergeben diesen an die set-Funktionen, um die Nutzerdaten prüfen zu können.
         <TouchableWithoutFeedback onPress={() => dismissKeyboard()}>
             <KeyboardAvoidingView style={styles.container}
             behavior='padding'>

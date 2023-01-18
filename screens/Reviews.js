@@ -1,3 +1,5 @@
+// Hier werden die Bewertungen mittels FlatList in einer Liste dargestellt.
+
 // import from react and react-native
 import { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, Image, FlatList, Modal, 
@@ -14,19 +16,19 @@ import { db } from '../firebase';
 
 // import components
 import ReviewCard from '../components/ReviewCard';
-import ReviewForm from '../screens/ReviewForm';
+import ReviewForm from '../components/ReviewForm';
 import BackButton from '../components/BackButton';
 import AppButton from '../components/AppButton';
 
 const Reviews = ({ route, navigation }) => {
 
-    const productID = route.params;
-
     const [modalOpen, setModalOpen] = useState(false);
     const [reviews, setReviews] = useState([]);
-
+    const productID = route.params;
     const reviewRef = collection(db, 'products', productID, 'reviews');
 
+    // Bei jeder Änderungen des Arrays in Firestore, welche die Bewertungen speichert,
+    // wird das lokale Array 'reviews' mittels useState geupdatet. 
     useEffect(() => {
         const unsubscribe = onSnapshot(reviewRef, (snapshot) => {
             let reviews = [];
@@ -35,10 +37,11 @@ const Reviews = ({ route, navigation }) => {
             });
             setReviews(reviews);
         });
-
         return () => unsubscribe();
       },[]);
 
+      // Siehe ReviewForm.js. Beim Triggern der Funktion werden die eingegebenen Daten übergeben
+      // und zur subcollection 'reviews' in Firestore als neues Bewertungs-Dokument hinzugefügt.
     const addReview = (review) => {
         addDoc(reviewRef, {
             review: {
@@ -50,13 +53,19 @@ const Reviews = ({ route, navigation }) => {
         setModalOpen(false);
     }
 
+    // Wenn diese Prüfung nicht erfolgt, ist die Eingabe von Text in Input-Feldern im Browser nicht möglich.
+    // Keyboard.dismiss
     function dismissKeyboard() {
         if (Platform.OS != "web") {
             Keyboard.dismiss();
         }
     }
     return ( 
-
+        // Das Modal ist wie ein eigenes Fenster, welches je nach Wert von modalOpen angezeigt wird oder nicht.
+        // Es enthält das Formular zur Eingabe einer Bewertung. Durch Klicken auf das Icon 'close' wird es 
+        // geschlossen. Der Klick auf den Button 'Bewertung hinzufügen' öffnet es.
+        // Wenn die Tastatur offen ist, kann diese weggeklickt werden, indem der Nutzer
+        // auf einem beliebigen Punkt auf dem Bildschirm drückt (Keyboard.dismiss).
         <View style={globalStyles.container}>
             <Modal visible={modalOpen} animationType='slide'>
                 <TouchableWithoutFeedback

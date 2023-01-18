@@ -7,7 +7,6 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 
 const AppButton = ({ pressHandler, title }) => {
-
     return ( 
         <TouchableOpacity onPress={() => pressHandler()}>
             <View style={styles.button}>
