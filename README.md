@@ -35,3 +35,6 @@ Quellen zu allen verwendeten Bildern in der App und in der Datei 'requirements_e
 - https://i.otto.de/i/otto/407d3828-7396-558f-b1bf-143b76c341d0?h=520&w=551&sm=clamp
 - https://www.shutterstock.com/search/15-year-old
 - https://www.buzzfeed.com/alexisnedd/reasons-phil-dunphy-is-an-amazing-catch
+
+## Nachtrag (nach Abgabe)
+Erklärung zum Commit 'final changes (comments)': Es wurden lediglich Kommentare eingebaut (welche auch in den Dateien der Abgabe drin sind). Die Dateien sollten der Abgabe auf moodle entsprechen, da keine funktionalen Änderungen im Code vorgenommen wurden, sondern lediglich die Dateien zum Repo committed wurden. 
